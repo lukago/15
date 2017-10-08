@@ -2,39 +2,43 @@ package sise.puzzle;
 
 import java.util.*;
 
-public class BFSSolver {
+public class DFSSolver {
 
     private final byte[] goal = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
+    private final int maxDepth = 11;
 
     private Puzzles currPuzzles;
     private Set<String> explored;
-    private Deque<Puzzles> frontier;
+    private Stack<Puzzles> frontier;
+    private int depth;
 
     public String solve(byte[] data) {
         init(data);
         hashState(currPuzzles);
 
         while (!frontier.isEmpty()) {
-            currPuzzles = frontier.remove();
+            currPuzzles = frontier.pop();
             if (isSolved()) break;
-            explorePaths();
+            explorePaths(currPuzzles);
         }
 
         return currPuzzles.getMovesHist().toString();
     }
 
-    private void explorePaths() {
-        moveLeft(currPuzzles.clone());
-        moveRight(currPuzzles.clone());
-        moveUp(currPuzzles.clone());
-        moveDown(currPuzzles.clone());
+    private void explorePaths(Puzzles puzzles) {
+        if (puzzles.getMovesHist().length() < maxDepth) {
+            moveLeft(puzzles.clone());
+            moveRight(puzzles.clone());
+            moveUp(puzzles.clone());
+            moveDown(puzzles.clone());
+        }
     }
 
     private void hashState(Puzzles puzzles) {
         String nextStr = Arrays.toString(puzzles.getPuzzles());
         if (!explored.contains(nextStr)) {
             explored.add(nextStr);
-            frontier.add(puzzles);
+            frontier.push(puzzles);
         }
     }
 
@@ -42,6 +46,7 @@ public class BFSSolver {
         if (puzzles.canMoveLeft()) {
             puzzles.moveLeft();
             hashState(puzzles);
+            explorePaths(puzzles);
         }
     }
 
@@ -49,6 +54,7 @@ public class BFSSolver {
         if (puzzles.canMoveRight()) {
             puzzles.moveRight();
             hashState(puzzles);
+            explorePaths(puzzles);
         }
     }
 
@@ -56,6 +62,7 @@ public class BFSSolver {
         if (puzzles.canMoveUp()) {
             puzzles.moveUp();
             hashState(puzzles);
+            explorePaths(puzzles);
         }
     }
 
@@ -63,6 +70,7 @@ public class BFSSolver {
         if (puzzles.canMoveDown()) {
             puzzles.moveDown();
             hashState(puzzles);
+            explorePaths(puzzles);
         }
     }
 
@@ -72,7 +80,8 @@ public class BFSSolver {
 
     private void init(byte[] data) {
         this.explored = new HashSet<>();
-        this.frontier = new LinkedList<>();
+        this.frontier = new Stack<>();
         this.currPuzzles = new Puzzles(data);
+        this.depth = 0;
     }
 }

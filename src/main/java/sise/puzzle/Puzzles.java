@@ -5,14 +5,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Puzzles {
+public class Puzzles implements Cloneable {
 
     private byte[] puzzles;
     private int zeroIndex;
+    private StringBuilder movesHist;
 
     public Puzzles(byte[] board) {
         this.puzzles = board.clone();
         this.zeroIndex = findZeroIndex();
+        this.movesHist = new StringBuilder("");
     }
 
     public boolean canMoveRight() {
@@ -33,18 +35,22 @@ public class Puzzles {
 
     public void moveLeft() {
         swapZero(zeroIndex - 1);
+        movesHist.append('L');
     }
 
     public void moveRight() {
         swapZero(zeroIndex + 1);
+        movesHist.append('R');
     }
 
     public void moveUp() {
         swapZero(zeroIndex - 4);
+        movesHist.append('U');
     }
 
     public void moveDown() {
         swapZero(zeroIndex + 4);
+        movesHist.append('D');
     }
 
     private void swapZero(int index) {
@@ -60,5 +66,12 @@ public class Puzzles {
             }
         }
         return -1;
+    }
+
+    @Override
+    public Puzzles clone() {
+        Puzzles newPuzzles = new Puzzles(getPuzzles());
+        newPuzzles.setMovesHist(new StringBuilder(movesHist.toString()));
+        return newPuzzles;
     }
 }
