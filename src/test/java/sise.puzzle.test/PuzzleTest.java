@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import sise.puzzle.BFSSolver;
 import sise.puzzle.DFSSolver;
-import sise.puzzle.Puzzles;
+import sise.puzzle.Node;
 
 import java.util.Arrays;
 
@@ -14,7 +14,6 @@ public class PuzzleTest {
     final byte[] data1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15};
     final byte[] data2 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 13, 14, 15, 12};
     final byte[] data3 = {1, 2, 3, 4, 5, 6, 11, 7, 14, 13, 10, 8, 9, 15, 0, 12};
-
 
     @Test
     public void bfsTest() {
@@ -33,19 +32,19 @@ public class PuzzleTest {
     }
 
     private byte[] moveByResponse(String res, byte[] data) {
-        Puzzles puzzles = new Puzzles(data);
+        Node node = new Node(null, data, Character.MIN_VALUE);
         for (char direction : res.toCharArray()) {
             if (direction == 'R') {
-                puzzles.moveRight();
+                node = node.getRightChild();
             } else if (direction == 'L') {
-                puzzles.moveLeft();
+                node = node.getLeftChild();
             } else if (direction == 'U') {
-                puzzles.moveUp();
+                node = node.getUpChild();
             } else if (direction == 'D') {
-                puzzles.moveDown();
+                node = node.getDownChild();
             }
         }
 
-        return puzzles.getPuzzles();
+        return node.getPuzzles();
     }
 }

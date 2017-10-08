@@ -6,73 +6,69 @@ public class BFSSolver {
 
     private final byte[] goal = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
 
-    private Puzzles currPuzzles;
+    private Node currNode;
     private Set<String> explored;
-    private Deque<Puzzles> frontier;
+    private Deque<Node> frontier;
 
     public String solve(byte[] data) {
         init(data);
-        hashState(currPuzzles);
+        hashState(currNode);
 
         while (!frontier.isEmpty()) {
-            currPuzzles = frontier.remove();
+            currNode = frontier.remove();
             if (isSolved()) break;
-            explorePaths();
+            explorePaths(currNode);
         }
 
-        return currPuzzles.getMovesHist().toString();
+        return currNode.getPath();
     }
 
-    private void explorePaths() {
-        moveLeft(currPuzzles.clone());
-        moveRight(currPuzzles.clone());
-        moveUp(currPuzzles.clone());
-        moveDown(currPuzzles.clone());
+    private void explorePaths(Node node) {
+        moveLeft(node);
+        moveRight(node);
+        moveUp(node);
+        moveDown(node);
     }
 
-    private void hashState(Puzzles puzzles) {
-        String nextStr = Arrays.toString(puzzles.getPuzzles());
+    private void hashState(Node node) {
+        String nextStr = Arrays.toString(node.getPuzzles());
         if (!explored.contains(nextStr)) {
             explored.add(nextStr);
-            frontier.add(puzzles);
+            frontier.add(node);
         }
     }
 
-    private void moveLeft(Puzzles puzzles) {
-        if (puzzles.canMoveLeft()) {
-            puzzles.moveLeft();
-            hashState(puzzles);
+    private void moveLeft(Node node) {
+        if (node.canMoveLeft()) {
+            hashState(node.getLeftChild());
         }
     }
 
-    private void moveRight(Puzzles puzzles) {
-        if (puzzles.canMoveRight()) {
-            puzzles.moveRight();
-            hashState(puzzles);
+    private void moveRight(Node node) {
+        if (node.canMoveRight()) {
+            hashState(node.getRightChild());
         }
     }
 
-    private void moveUp(Puzzles puzzles) {
-        if (puzzles.canMoveUp()) {
-            puzzles.moveUp();
-            hashState(puzzles);
+    private void moveUp(Node node) {
+        if (node.canMoveUp()) {
+            hashState(node.getUpChild());
         }
     }
 
-    private void moveDown(Puzzles puzzles) {
-        if (puzzles.canMoveDown()) {
-            puzzles.moveDown();
-            hashState(puzzles);
+    private void moveDown(Node node) {
+        if (node.canMoveDown()) {
+            hashState(node.getDownChild());
         }
     }
 
     private boolean isSolved() {
-        return Arrays.equals(currPuzzles.getPuzzles(), goal);
+        return Arrays.equals(currNode.getPuzzles(), goal);
     }
 
     private void init(byte[] data) {
         this.explored = new HashSet<>();
         this.frontier = new LinkedList<>();
-        this.currPuzzles = new Puzzles(data);
+        this.currNode = new Node(null, data, Character.MIN_VALUE);
     }
 }

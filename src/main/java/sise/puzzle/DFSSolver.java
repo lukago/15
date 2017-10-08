@@ -7,81 +7,79 @@ public class DFSSolver {
     private final byte[] goal = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
     private final int maxDepth = 11;
 
-    private Puzzles currPuzzles;
+    private Node currNode;
     private Set<String> explored;
-    private Stack<Puzzles> frontier;
-    private int depth;
+    private Stack<Node> frontier;
 
     public String solve(byte[] data) {
         init(data);
-        hashState(currPuzzles);
+        hashState(currNode);
 
         while (!frontier.isEmpty()) {
-            currPuzzles = frontier.pop();
-            if (isSolved()) break;
-            explorePaths(currPuzzles);
+            currNode = frontier.pop();
+            if (isSolved(currNode)) break;
+            explorePaths(currNode);
         }
 
-        return currPuzzles.getMovesHist().toString();
+        return currNode.getPath();
     }
 
-    private void explorePaths(Puzzles puzzles) {
-        if (puzzles.getMovesHist().length() < maxDepth) {
-            moveLeft(puzzles.clone());
-            moveRight(puzzles.clone());
-            moveUp(puzzles.clone());
-            moveDown(puzzles.clone());
+    private void explorePaths(Node node) {
+        if (node.getDepth() < maxDepth) {
+            moveLeft(node);
+            moveRight(node);
+            moveUp(node);
+            moveDown(node);
         }
     }
 
-    private void hashState(Puzzles puzzles) {
-        String nextStr = Arrays.toString(puzzles.getPuzzles());
+    private void hashState(Node node) {
+        String nextStr = Arrays.toString(node.getPuzzles());
         if (!explored.contains(nextStr)) {
             explored.add(nextStr);
-            frontier.push(puzzles);
+            frontier.push(node);
         }
     }
 
-    private void moveLeft(Puzzles puzzles) {
-        if (puzzles.canMoveLeft()) {
-            puzzles.moveLeft();
-            hashState(puzzles);
-            explorePaths(puzzles);
+    private void moveLeft(Node node) {
+        if (node.canMoveLeft()) {
+            node = node.getLeftChild();
+            hashState(node);
+            explorePaths(node);
         }
     }
 
-    private void moveRight(Puzzles puzzles) {
-        if (puzzles.canMoveRight()) {
-            puzzles.moveRight();
-            hashState(puzzles);
-            explorePaths(puzzles);
+    private void moveRight(Node node) {
+        if (node.canMoveRight()) {
+            node = node.getRightChild();
+            hashState(node);
+            explorePaths(node);
         }
     }
 
-    private void moveUp(Puzzles puzzles) {
-        if (puzzles.canMoveUp()) {
-            puzzles.moveUp();
-            hashState(puzzles);
-            explorePaths(puzzles);
+    private void moveUp(Node node) {
+        if (node.canMoveUp()) {
+            node = node.getUpChild();
+            hashState(node);
+            explorePaths(node);
         }
     }
 
-    private void moveDown(Puzzles puzzles) {
-        if (puzzles.canMoveDown()) {
-            puzzles.moveDown();
-            hashState(puzzles);
-            explorePaths(puzzles);
+    private void moveDown(Node node) {
+        if (node.canMoveDown()) {
+            node = node.getDownChild();
+            hashState(node);
+            explorePaths(node);
         }
     }
 
-    private boolean isSolved() {
-        return Arrays.equals(currPuzzles.getPuzzles(), goal);
+    private boolean isSolved(Node node) {
+        return Arrays.equals(node.getPuzzles(), goal);
     }
 
     private void init(byte[] data) {
         this.explored = new HashSet<>();
         this.frontier = new Stack<>();
-        this.currPuzzles = new Puzzles(data);
-        this.depth = 0;
+        this.currNode = new Node(null, data, Character.MIN_VALUE);
     }
 }
