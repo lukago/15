@@ -34,7 +34,7 @@ public class DFSSolver {
     }
 
     private void hashState(Node node) {
-        String nextStr = Arrays.toString(node.getPuzzles());
+        String nextStr = Arrays.toString(node.getBoard());
         if (!explored.contains(nextStr)) {
             explored.add(nextStr);
             frontier.push(node);
@@ -42,39 +42,39 @@ public class DFSSolver {
     }
 
     private void moveLeft(Node node) {
-        if (node.canMoveLeft()) {
-            node = node.getLeftChild();
+        node = node.getLeftChild();
+        if (node != null) {
             hashState(node);
             explorePaths(node);
         }
     }
 
     private void moveRight(Node node) {
-        if (node.canMoveRight()) {
-            node = node.getRightChild();
+        node = node.getRightChild();
+        if (node != null) {
             hashState(node);
             explorePaths(node);
         }
     }
 
     private void moveUp(Node node) {
-        if (node.canMoveUp()) {
-            node = node.getUpChild();
+        node = node.getUpChild();
+        if (node != null) {
             hashState(node);
             explorePaths(node);
         }
     }
 
     private void moveDown(Node node) {
-        if (node.canMoveDown()) {
-            node = node.getDownChild();
+        node = node.getDownChild();
+        if (node != null) {
             hashState(node);
             explorePaths(node);
         }
     }
 
     private boolean isSolved(Node node) {
-        return Arrays.equals(node.getPuzzles(), goal);
+        return Arrays.equals(node.getBoard(), goal);
     }
 
     private void init(byte[] data) {

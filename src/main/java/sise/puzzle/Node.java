@@ -7,60 +7,61 @@ import lombok.Setter;
 @Setter
 public class Node {
 
-    private byte[] puzzles;
+    private byte[] board;
     private int zeroIndex;
     private char operator;
     private Node parent;
 
-    public Node( Node parent, byte[] board, char operator) {
-        this.puzzles = board.clone();
-        this.zeroIndex = findZeroIndex();
+    public Node(Node parent, byte[] board, char operator, int zeroIndex) {
+        this.board = board.clone();
+        this.zeroIndex = zeroIndex;
         this.operator = operator;
         this.parent = parent;
     }
 
-    public boolean canMoveRight() {
-        return (zeroIndex - 3) % 4 != 0;
-    }
-
-    public boolean canMoveLeft() {
-        return (zeroIndex % 4 != 0);
-    }
-
-    public boolean canMoveUp() {
-        return zeroIndex - 3 > 0;
-    }
-
-    public boolean canMoveDown() {
-        return zeroIndex - 12 < 0;
+    public Node(Node parent, byte[] board, char operator) {
+        this(parent, board, operator, -1);
+        this.zeroIndex = findZeroIndex();
     }
 
     public Node getLeftChild() {
-        swapZero(zeroIndex - 1);
-        Node child = new Node(this, puzzles, 'L');
-        swapZero(zeroIndex + 1);
-        return child;
+        if (zeroIndex % 4 != 0) {
+            swapZero(zeroIndex - 1);
+            Node child = new Node(this, board, 'L', zeroIndex);
+            swapZero(zeroIndex + 1);
+            return child;
+        }
+        return null;
     }
 
     public Node getRightChild() {
-        swapZero(zeroIndex + 1);
-        Node child = new Node(this, puzzles, 'R');
-        swapZero(zeroIndex - 1);
-        return child;
+        if ((zeroIndex - 3) % 4 != 0) {
+            swapZero(zeroIndex + 1);
+            Node child = new Node(this, board, 'R', zeroIndex);
+            swapZero(zeroIndex - 1);
+            return child;
+        }
+        return null;
     }
 
     public Node getUpChild() {
-        swapZero(zeroIndex - 4);
-        Node child = new Node(this, puzzles, 'U');
-        swapZero(zeroIndex + 4);
-        return child;
+        if (zeroIndex - 3 > 0) {
+            swapZero(zeroIndex - 4);
+            Node child = new Node(this, board, 'U', zeroIndex);
+            swapZero(zeroIndex + 4);
+            return child;
+        }
+        return null;
     }
 
     public Node getDownChild() {
-        swapZero(zeroIndex + 4);
-        Node child = new Node(this, puzzles, 'D');
-        swapZero(zeroIndex - 4);
-        return child;
+        if (zeroIndex -12 < 0) {
+            swapZero(zeroIndex + 4);
+            Node child = new Node(this, board, 'D', zeroIndex);
+            swapZero(zeroIndex - 4);
+            return child;
+        }
+        return null;
     }
 
     public String getPath() {
@@ -80,14 +81,14 @@ public class Node {
     }
 
     private void swapZero(int index) {
-        puzzles[zeroIndex] = puzzles[index];
-        puzzles[index] = 0;
+        board[zeroIndex] = board[index];
+        board[index] = 0;
         zeroIndex = index;
     }
 
     private int findZeroIndex() {
-        for (int i = 0; i < puzzles.length; i++) {
-            if (puzzles[i] == 0) {
+        for (int i = 0; i < board.length; i++) {
+            if (board[i] == 0) {
                 return i;
             }
         }

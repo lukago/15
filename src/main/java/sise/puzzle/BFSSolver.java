@@ -12,11 +12,11 @@ public class BFSSolver {
 
     public String solve(byte[] data) {
         init(data);
-        hashState(currNode);
+        hashNode(currNode);
 
         while (!frontier.isEmpty()) {
             currNode = frontier.remove();
-            if (isSolved()) break;
+            if (isSolved(currNode)) break;
             explorePaths(currNode);
         }
 
@@ -24,46 +24,24 @@ public class BFSSolver {
     }
 
     private void explorePaths(Node node) {
-        moveLeft(node);
-        moveRight(node);
-        moveUp(node);
-        moveDown(node);
+        hashNode(node.getLeftChild());
+        hashNode(node.getRightChild());
+        hashNode(node.getUpChild());
+        hashNode(node.getDownChild());
     }
 
-    private void hashState(Node node) {
-        String nextStr = Arrays.toString(node.getPuzzles());
-        if (!explored.contains(nextStr)) {
-            explored.add(nextStr);
-            frontier.add(node);
+    private void hashNode(Node node) {
+        if (node != null) {
+            String nextStr = Arrays.toString(node.getBoard());
+            if (!explored.contains(nextStr)) {
+                explored.add(nextStr);
+                frontier.add(node);
+            }
         }
     }
 
-    private void moveLeft(Node node) {
-        if (node.canMoveLeft()) {
-            hashState(node.getLeftChild());
-        }
-    }
-
-    private void moveRight(Node node) {
-        if (node.canMoveRight()) {
-            hashState(node.getRightChild());
-        }
-    }
-
-    private void moveUp(Node node) {
-        if (node.canMoveUp()) {
-            hashState(node.getUpChild());
-        }
-    }
-
-    private void moveDown(Node node) {
-        if (node.canMoveDown()) {
-            hashState(node.getDownChild());
-        }
-    }
-
-    private boolean isSolved() {
-        return Arrays.equals(currNode.getPuzzles(), goal);
+    private boolean isSolved(Node node) {
+        return Arrays.equals(node.getBoard(), goal);
     }
 
     private void init(byte[] data) {

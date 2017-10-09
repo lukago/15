@@ -45,6 +45,6 @@ public class PuzzleTest {
             }
         }
 
-        return node.getPuzzles();
+        return node.getBoard();
     }
 }
