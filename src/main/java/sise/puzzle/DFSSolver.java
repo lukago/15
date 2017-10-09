@@ -4,15 +4,15 @@ import java.util.*;
 
 public class DFSSolver {
 
-    private final byte[] goal = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
     private final int maxDepth = 11;
 
+    private byte[] goal;
     private Node currNode;
     private Set<String> explored;
     private Stack<Node> frontier;
 
-    public String solve(byte[] data) {
-        init(data);
+    public String solve(byte[] data, int width, int length) {
+        init(data, width, length);
         hashState(currNode);
 
         while (!frontier.isEmpty()) {
@@ -77,9 +77,15 @@ public class DFSSolver {
         return Arrays.equals(node.getBoard(), goal);
     }
 
-    private void init(byte[] data) {
+    private void init(byte[] data, int width, int height) {
         this.explored = new HashSet<>();
         this.frontier = new Stack<>();
-        this.currNode = new Node(null, data, Character.MIN_VALUE);
+        this.currNode = new Node(null, data, Character.MIN_VALUE, width, height);
+
+        this.goal = new byte[width * height];
+        for (int i = 0; i<goal.length - 1; i++) {
+            goal[i] = (byte) (i + 1);
+        }
+        goal[goal.length - 1] = 0;
     }
 }

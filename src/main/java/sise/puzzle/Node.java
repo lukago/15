@@ -8,26 +8,30 @@ import lombok.Setter;
 public class Node {
 
     private byte[] board;
-    private int zeroIndex;
+    private byte height;
+    private byte width;
     private char operator;
+    private int zeroIndex;
     private Node parent;
 
-    public Node(Node parent, byte[] board, char operator, int zeroIndex) {
+    public Node(Node parent, byte[] board, char operator, int zeroIndex, int width, int height) {
         this.board = board.clone();
         this.zeroIndex = zeroIndex;
         this.operator = operator;
         this.parent = parent;
+        this.height = (byte) height;
+        this.width = (byte) width;
     }
 
-    public Node(Node parent, byte[] board, char operator) {
-        this(parent, board, operator, -1);
-        this.zeroIndex = findZeroIndex();
+    public Node(Node parent, byte[] board, char operator, int width, int height) {
+        this(parent, board, operator, -1, width, height);
+        this.zeroIndex = findZeroPos();
     }
 
     public Node getLeftChild() {
-        if (zeroIndex % 4 != 0) {
+        if (zeroIndex % width != 0) {
             swapZero(zeroIndex - 1);
-            Node child = new Node(this, board, 'L', zeroIndex);
+            Node child = new Node(this, board, 'L', zeroIndex, this.width, this.height);
             swapZero(zeroIndex + 1);
             return child;
         }
@@ -35,9 +39,9 @@ public class Node {
     }
 
     public Node getRightChild() {
-        if ((zeroIndex - 3) % 4 != 0) {
+        if ((zeroIndex - width + 1) % width != 0) {
             swapZero(zeroIndex + 1);
-            Node child = new Node(this, board, 'R', zeroIndex);
+            Node child = new Node(this, board, 'R', zeroIndex, this.width, this.height);
             swapZero(zeroIndex - 1);
             return child;
         }
@@ -45,20 +49,20 @@ public class Node {
     }
 
     public Node getUpChild() {
-        if (zeroIndex - 3 > 0) {
-            swapZero(zeroIndex - 4);
-            Node child = new Node(this, board, 'U', zeroIndex);
-            swapZero(zeroIndex + 4);
+        if ((zeroIndex - width + 1) > 0) {
+            swapZero(zeroIndex - width);
+            Node child = new Node(this, board, 'U', zeroIndex, this.width, this.height);
+            swapZero(zeroIndex + width);
             return child;
         }
         return null;
     }
 
     public Node getDownChild() {
-        if (zeroIndex -12 < 0) {
-            swapZero(zeroIndex + 4);
-            Node child = new Node(this, board, 'D', zeroIndex);
-            swapZero(zeroIndex - 4);
+        if (zeroIndex - (width * height - width) < 0) {
+            swapZero(zeroIndex + width);
+            Node child = new Node(this, board, 'D', zeroIndex, this.width, this.height);
+            swapZero(zeroIndex - width);
             return child;
         }
         return null;
@@ -86,11 +90,9 @@ public class Node {
         zeroIndex = index;
     }
 
-    private int findZeroIndex() {
+    private int findZeroPos() {
         for (int i = 0; i < board.length; i++) {
-            if (board[i] == 0) {
-                return i;
-            }
+            if (board[i] == 0) return i;
         }
         return -1;
     }

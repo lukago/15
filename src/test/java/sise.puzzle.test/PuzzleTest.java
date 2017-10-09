@@ -9,7 +9,7 @@ import sise.puzzle.Node;
 import java.util.Arrays;
 
 public class PuzzleTest {
-
+    final int w = 4, h = 4;
     final byte[] goal = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
     final byte[] data1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15};
     final byte[] data2 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 13, 14, 15, 12};
@@ -18,21 +18,21 @@ public class PuzzleTest {
     @Test
     public void bfsTest() {
         BFSSolver bfsSolver = new BFSSolver();
-        Assert.assertEquals(Arrays.toString(moveByResponse(bfsSolver.solve(data1), data1)), Arrays.toString(goal));
-        Assert.assertEquals(Arrays.toString(moveByResponse(bfsSolver.solve(data2), data2)), Arrays.toString(goal));
-        Assert.assertEquals(Arrays.toString(moveByResponse(bfsSolver.solve(data3), data3)), Arrays.toString(goal));
+        Assert.assertEquals(Arrays.toString(moveByResponse(bfsSolver.solve(data1, w, h), data1)), Arrays.toString(goal));
+        Assert.assertEquals(Arrays.toString(moveByResponse(bfsSolver.solve(data2, w, h), data2)), Arrays.toString(goal));
+        Assert.assertEquals(Arrays.toString(moveByResponse(bfsSolver.solve(data3, w, h), data3)), Arrays.toString(goal));
     }
 
     @Test
     public void dfsTest() {
         DFSSolver dfsSolver = new DFSSolver();
-        Assert.assertEquals(Arrays.toString(moveByResponse(dfsSolver.solve(data1), data1)), Arrays.toString(goal));
-        Assert.assertEquals(Arrays.toString(moveByResponse(dfsSolver.solve(data2), data2)), Arrays.toString(goal));
-        Assert.assertEquals(Arrays.toString(moveByResponse(dfsSolver.solve(data3), data3)), Arrays.toString(goal));
+        Assert.assertEquals(Arrays.toString(moveByResponse(dfsSolver.solve(data1, w, h), data1)), Arrays.toString(goal));
+        Assert.assertEquals(Arrays.toString(moveByResponse(dfsSolver.solve(data2, w, h), data2)), Arrays.toString(goal));
+        Assert.assertEquals(Arrays.toString(moveByResponse(dfsSolver.solve(data3, w, h), data3)), Arrays.toString(goal));
     }
 
     private byte[] moveByResponse(String res, byte[] data) {
-        Node node = new Node(null, data, Character.MIN_VALUE);
+        Node node = new Node(null, data, Character.MIN_VALUE, w, h);
         for (char direction : res.toCharArray()) {
             if (direction == 'R') {
                 node = node.getRightChild();
@@ -44,7 +44,6 @@ public class PuzzleTest {
                 node = node.getDownChild();
             }
         }
-
         return node.getBoard();
     }
 }
