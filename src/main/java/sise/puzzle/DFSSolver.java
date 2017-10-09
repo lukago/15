@@ -6,13 +6,14 @@ public class DFSSolver {
 
     private final int maxDepth = 11;
 
+    private char[] order;
     private byte[] goal;
     private Node currNode;
     private Set<String> explored;
     private Stack<Node> frontier;
 
-    public String solve(byte[] data, int width, int length) {
-        init(data, width, length);
+    public String solve(byte[] data, int width, int length, char[] order) {
+        init(data, width, length, order);
         hashState(currNode);
 
         while (!frontier.isEmpty()) {
@@ -26,15 +27,22 @@ public class DFSSolver {
 
     private void explorePaths(Node node) {
         if (node.getDepth() < maxDepth) {
-            moveLeft(node);
-            moveRight(node);
-            moveUp(node);
-            moveDown(node);
+            for (char c : order) {
+                if (c == 'L') {
+                    moveLeft(node);
+                } else if (c == 'R') {
+                    moveRight(node);
+                } else if (c == 'U') {
+                    moveUp(node);
+                } else if (c == 'D') {
+                    moveDown(node);
+                }
+            }
         }
     }
 
     private void hashState(Node node) {
-        String nextStr = Arrays.toString(node.getBoard());
+        String nextStr = Arrays.toString(node.board.data);
         if (!explored.contains(nextStr)) {
             explored.add(nextStr);
             frontier.push(node);
@@ -74,18 +82,14 @@ public class DFSSolver {
     }
 
     private boolean isSolved(Node node) {
-        return Arrays.equals(node.getBoard(), goal);
+        return Arrays.equals(node.board.data, goal);
     }
 
-    private void init(byte[] data, int width, int height) {
+    private void init(byte[] data, int width, int height, char[] order) {
+        this.currNode = new Node(null, new Board(data, Character.MIN_VALUE, Utils.findZeroPos(data), width, height));
         this.explored = new HashSet<>();
         this.frontier = new Stack<>();
-        this.currNode = new Node(null, data, Character.MIN_VALUE, width, height);
-
-        this.goal = new byte[width * height];
-        for (int i = 0; i<goal.length - 1; i++) {
-            goal[i] = (byte) (i + 1);
-        }
-        goal[goal.length - 1] = 0;
+        this.goal = Utils.getGoalZeroLast(width * height);
+        this.order = order.clone();
     }
 }

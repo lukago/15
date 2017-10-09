@@ -1,0 +1,53 @@
+package sise.puzzle;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Utils {
+
+    public static int findZeroPos(byte[] data) {
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] == 0) return i;
+        }
+        return -1;
+    }
+
+    public static byte[] getGoalZeroLast(int len) {
+        byte[] goal = new byte[len];
+        for (int i = 0; i < goal.length - 1; i++) {
+            goal[i] = (byte) (i + 1);
+        }
+        goal[goal.length - 1] = 0;
+        return goal;
+    }
+
+    public static Board readBoardFromFile(String path) {
+        int width = 0, height = 0;
+        byte[] data = new byte[0];
+
+        try {
+            List<int[]> lines = Files.lines(Paths.get(path))
+                    .map(line -> Arrays.stream(line.split(" ")).mapToInt(Byte::parseByte).toArray())
+                    .collect(Collectors.toList());
+            width = lines.get(0)[0];
+            height = lines.get(0)[1];
+            data = new byte[width*height];
+
+            int index = 0;
+            for (int i = 1; i<lines.size(); i++) {
+                for (int j = 0; j<lines.get(i).length; j++) {
+                    data[index++] = (byte) lines.get(i)[j];
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new Board(data, Character.MIN_VALUE, findZeroPos(data), width, height);
+    }
+
+}

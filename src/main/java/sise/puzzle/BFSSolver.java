@@ -4,13 +4,14 @@ import java.util.*;
 
 public class BFSSolver {
 
+    private char[] order;
     private byte[] goal;
     private Node currNode;
     private Set<String> explored;
     private Deque<Node> frontier;
 
-    public String solve(byte[] data, int width, int length) {
-        init(data, width, length);
+    public String solve(byte[] data, int width, int length, char[] order) {
+        init(data, width, length, order);
         hashNode(currNode);
 
         while (!frontier.isEmpty()) {
@@ -23,15 +24,22 @@ public class BFSSolver {
     }
 
     private void explorePaths(Node node) {
-        hashNode(node.getLeftChild());
-        hashNode(node.getRightChild());
-        hashNode(node.getUpChild());
-        hashNode(node.getDownChild());
+        for (char c : order) {
+            if (c == 'L') {
+                hashNode(node.getLeftChild());
+            } else if (c == 'R') {
+                hashNode(node.getRightChild());
+            } else if (c == 'U') {
+                hashNode(node.getUpChild());
+            } else if (c == 'D') {
+                hashNode(node.getDownChild());
+            }
+        }
     }
 
     private void hashNode(Node node) {
         if (node != null) {
-            String nextStr = Arrays.toString(node.getBoard());
+            String nextStr = Arrays.toString(node.board.data);
             if (!explored.contains(nextStr)) {
                 explored.add(nextStr);
                 frontier.add(node);
@@ -40,18 +48,14 @@ public class BFSSolver {
     }
 
     private boolean isSolved(Node node) {
-        return Arrays.equals(node.getBoard(), goal);
+        return Arrays.equals(node.board.data, goal);
     }
 
-    private void init(byte[] data, int width, int height) {
+    private void init(byte[] data, int width, int height, char[] order) {
+        this.currNode = new Node(null, new Board(data, Character.MIN_VALUE, Utils.findZeroPos(data), width, height));
         this.explored = new HashSet<>();
         this.frontier = new LinkedList<>();
-        this.currNode = new Node(null, data, Character.MIN_VALUE, width, height);
-
-        this.goal = new byte[width * height];
-        for (int i = 0; i<goal.length - 1; i++) {
-            goal[i] = (byte) (i + 1);
-        }
-        goal[goal.length - 1] = 0;
+        this.goal = Utils.getGoalZeroLast(width * height);
+        this.order = order.clone();
     }
 }
