@@ -16,7 +16,7 @@
 #  progcmd="java -jar /home/user/15puzzle/bin/solver.jar" (executable JAR file)
 #  progcmd="python /home/user/15puzzle/bin/solver.py" (Python file)
 
-progcmd='echo program'
+progcmd='java -jar /home/admin/studbaza/sem_5/sise/fifteen-puzzle/target/puzzle-1.0-jar-with-dependencies.jar'
 orders=(RDUL RDLU DRUL DRLU LUDR LURD ULDR ULRD)
 heuristics=(hamm manh)
 init_filename_regex='^[a-zA-Z0-9]+_[0-9]+_[0-9]+.txt$'

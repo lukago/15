@@ -3,26 +3,34 @@ package sise.puzzle;
 public class App {
 
     public static void main(String[] args) {
-        int w = 4, h = 4;
-        char[] order = "LRUD".toCharArray();
-        byte[] data1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15};
-        byte[] data2 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 13, 14, 15, 12};
-        byte[] data3 = {1, 2, 3, 4, 5, 6, 11, 7, 14, 13, 10, 8, 9, 15, 0, 12};
+        parseArgs(args);
+    }
 
-        BFSSolver bfsSolver = new BFSSolver();
-        DFSSolver dfsSolver = new DFSSolver();
+    private static void parseArgs(String[] args) {
+        String alg = args[0];
+        String odrer = args[1];
+        String dataPath = args[2];
+        String resPath = args[3];
+        String statPath = args[4];
 
-        //System.out.println(bfsSolver.solve(data1, w, h, order));
-        //System.out.println(bfsSolver.solve(data2, w, h, order));
-        //System.out.println(bfsSolver.solve(data3, w, h, order));
+        Solver solver;
+        switch (alg) {
+            case "bfs":
+                solver = new BFSSolver();
+                break;
+            case "dfs":
+                solver = new DFSSolver();
+                break;
+            default:
+                solver = new BFSSolver();
+                break;
+        }
 
-        System.out.println(dfsSolver.solve(data1, w, h, order));
-        //System.out.println(dfsSolver.solve(data2, w, h, order));
-        //System.out.println(dfsSolver.solve(data3, w, h, order));
-
-        //dfsSolver.solve(data1, w, h, order);
-        //dfsSolver.solve(data2, w, h, order);
-        //dfsSolver.solve(data3, w, h, order);
+        Board board = Utils.readBoardFromFile(dataPath);
+        Solution solution = solver.solve(board, odrer);
+        System.out.println("Writing results of " + dataPath);
+        Utils.writeSolution(solution, resPath);
+        Utils.writeStats(solution, statPath);
     }
 
 }

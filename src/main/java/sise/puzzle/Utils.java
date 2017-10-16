@@ -1,5 +1,6 @@
 package sise.puzzle;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,7 +17,7 @@ public class Utils {
         return -1;
     }
 
-    public static byte[] getGoalZeroLast(int len) {
+    public static byte[] genGoal(int len) {
         byte[] goal = new byte[len];
         for (int i = 0; i < goal.length - 1; i++) {
             goal[i] = (byte) (i + 1);
@@ -35,11 +36,11 @@ public class Utils {
                     .collect(Collectors.toList());
             width = lines.get(0)[0];
             height = lines.get(0)[1];
-            data = new byte[width*height];
+            data = new byte[width * height];
 
             int index = 0;
-            for (int i = 1; i<lines.size(); i++) {
-                for (int j = 0; j<lines.get(i).length; j++) {
+            for (int i = 1; i < lines.size(); i++) {
+                for (int j = 0; j < lines.get(i).length; j++) {
                     data[index++] = (byte) lines.get(i)[j];
                 }
             }
@@ -47,7 +48,40 @@ public class Utils {
             e.printStackTrace();
         }
 
-        return new Board(data, Character.MIN_VALUE, findZeroPos(data), width, height);
+        return boardOf(data, width, height);
+    }
+
+    public static void writeSolution(Solution solution, String path) {
+        try (FileWriter ostream = new FileWriter(path)) {
+            if (solution.getPath().length() > 0) {
+                ostream.write(solution.getPath().length() + "\n");
+            } else {
+                ostream.write("-1\n");
+            }
+            ostream.write(solution.getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeStats(Solution solution, String path) {
+        try (FileWriter ostream = new FileWriter(path)) {
+            if (solution.getPath().length() > 0) {
+                ostream.write(solution.getPath().length() + "\n");
+            } else {
+                ostream.write("-1\n");
+            }
+            ostream.write(solution.getVisitedNum() + "\n");
+            ostream.write(solution.getFinishedNum() + "\n");
+            ostream.write(solution.getMaxDepth() + "\n");
+            ostream.write(solution.getTimeMillis() + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Board boardOf(byte[] data, int width, int height) {
+        return new Board(data, Character.MIN_VALUE, Utils.findZeroPos(data), width, height);
     }
 
 }

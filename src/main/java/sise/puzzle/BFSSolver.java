@@ -2,28 +2,40 @@ package sise.puzzle;
 
 import java.util.*;
 
-public class BFSSolver {
+public class BFSSolver implements Solver {
 
     private char[] order;
     private byte[] goal;
     private Node currNode;
     private Set<Node> explored;
     private Deque<Node> frontier;
+    private boolean solved;
+    private String path;
+    private int maxDepthReached;
 
-    public String solve(byte[] data, int width, int length, char[] order) {
-        init(data, width, length, order);
+    public Solution solve(Board board, String order) {
+        long time = System.currentTimeMillis();
+        init(board, order);
         hashNode(currNode);
 
-        while (!frontier.isEmpty()) {
+        while (!frontier.isEmpty() && !solved) {
             currNode = frontier.remove();
-            if (isSolved(currNode)) break;
             explorePaths(currNode);
         }
 
-        return currNode.getPath();
+        return new Solution(path, System.currentTimeMillis() - time, maxDepthReached,
+                explored.size(), explored.size() - frontier.size());
     }
 
     private void explorePaths(Node node) {
+        checkMaxDepth(node);
+
+        if (isSolved(node)) {
+            solved = true;
+            path = node.getPath();
+            return;
+        }
+
         for (char c : order) {
             if (c == 'L') {
                 hashNode(node.getLeftChild());
@@ -50,11 +62,21 @@ public class BFSSolver {
         return Arrays.equals(node.board.data, goal);
     }
 
-    private void init(byte[] data, int width, int height, char[] order) {
-        this.currNode = new Node(null, new Board(data, Character.MIN_VALUE, Utils.findZeroPos(data), width, height));
+    private void checkMaxDepth(Node node) {
+        int nodeDepth = node.getDepth();
+        if (nodeDepth > maxDepthReached) {
+            maxDepthReached = nodeDepth;
+        }
+    }
+
+    private void init(Board board, String order) {
+        this.currNode = new Node(null, board);
         this.explored = new HashSet<>();
         this.frontier = new LinkedList<>();
-        this.goal = Utils.getGoalZeroLast(width * height);
-        this.order = order.clone();
+        this.goal = Utils.genGoal(board.width * board.height);
+        this.order = order.toCharArray();
+        this.solved = false;
+        this.path = "";
+        this.maxDepthReached = 0;
     }
 }

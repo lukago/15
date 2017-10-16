@@ -21,8 +21,4 @@ public class Board {
         data[index] = 0;
         zeroIndex = index;
     }
-
-    public byte[] getData() {
-        return data;
-    }
 }

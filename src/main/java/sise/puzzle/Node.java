@@ -72,8 +72,8 @@ public class Node {
         return depth;
     }
 
-    public Board getBoard() {
-        return board;
+    public byte[] getData() {
+        return board.data;
     }
 
     @Override

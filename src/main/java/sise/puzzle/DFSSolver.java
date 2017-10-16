@@ -2,9 +2,9 @@ package sise.puzzle;
 
 import java.util.*;
 
-public class DFSSolver {
+public class DFSSolver implements Solver {
 
-    private final int MAX_DEPTH = 15;
+    private final int MAX_DEPTH = 25;
 
     private char[] order;
     private byte[] goal;
@@ -12,10 +12,12 @@ public class DFSSolver {
     private Set<Node> explored;
     private Stack<Node> frontier;
     private boolean solved;
-    private String solution;
+    private String path;
+    private int maxDepthReached;
 
-    public String solve(byte[] data, int width, int length, char[] order) {
-        init(data, width, length, order);
+    public Solution solve(Board board, String order) {
+        long time = System.currentTimeMillis();
+        init(board, order);
         hashState(currNode);
 
         while (!frontier.isEmpty() || !solved) {
@@ -23,13 +25,20 @@ public class DFSSolver {
             explorePaths(currNode);
         }
 
-        return solution;
+        return new Solution(
+                path,
+                System.currentTimeMillis() - time,
+                maxDepthReached,
+                explored.size(),
+                explored.size() - frontier.size());
     }
 
     private void explorePaths(Node node) {
+        checkMaxDepth(node);
+
         if (isSolved(node) && !solved) {
             solved = true;
-            solution = node.getPath();
+            path = node.getPath();
         }
 
         if (node.getDepth() < MAX_DEPTH && !solved) {
@@ -92,13 +101,21 @@ public class DFSSolver {
         return Arrays.equals(node.board.data, goal);
     }
 
-    private void init(byte[] data, int width, int height, char[] order) {
-        this.currNode = new Node(null, new Board(data, Character.MIN_VALUE, Utils.findZeroPos(data), width, height));
+    private void checkMaxDepth(Node node) {
+        int nodeDepth = node.getDepth();
+        if (nodeDepth > maxDepthReached) {
+            maxDepthReached = nodeDepth;
+        }
+    }
+
+    private void init(Board board, String order) {
+        this.currNode = new Node(null, board);
         this.explored = new HashSet<>();
         this.frontier = new Stack<>();
-        this.goal = Utils.getGoalZeroLast(width * height);
-        this.order = order.clone();
+        this.goal = Utils.genGoal(board.width * board.height);
+        this.order = order.toCharArray();
         this.solved = false;
-        this.solution = "-1";
+        this.path = "";
+        this.maxDepthReached = 0;
     }
 }
