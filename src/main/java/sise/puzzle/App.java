@@ -12,13 +12,17 @@ public class App {
         BFSSolver bfsSolver = new BFSSolver();
         DFSSolver dfsSolver = new DFSSolver();
 
-        System.out.println(bfsSolver.solve(data1, w, h, order));
-        System.out.println(bfsSolver.solve(data2, w, h, order));
-        System.out.println(bfsSolver.solve(data3, w, h, order));
+        //System.out.println(bfsSolver.solve(data1, w, h, order));
+        //System.out.println(bfsSolver.solve(data2, w, h, order));
+        //System.out.println(bfsSolver.solve(data3, w, h, order));
 
         System.out.println(dfsSolver.solve(data1, w, h, order));
-        System.out.println(dfsSolver.solve(data2, w, h, order));
-        System.out.println(dfsSolver.solve(data3, w, h, order));
+        //System.out.println(dfsSolver.solve(data2, w, h, order));
+        //System.out.println(dfsSolver.solve(data3, w, h, order));
+
+        //dfsSolver.solve(data1, w, h, order);
+        //dfsSolver.solve(data2, w, h, order);
+        //dfsSolver.solve(data3, w, h, order);
     }
 
 }

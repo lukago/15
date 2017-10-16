@@ -1,5 +1,7 @@
 package sise.puzzle;
 
+import java.util.Arrays;
+
 public class Node {
 
     Board board;
@@ -72,5 +74,20 @@ public class Node {
 
     public Board getBoard() {
         return board;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Node node = (Node) o;
+
+        return Arrays.equals(node.board.data, board.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(board.data);
     }
 }

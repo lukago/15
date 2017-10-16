@@ -7,7 +7,7 @@ public class BFSSolver {
     private char[] order;
     private byte[] goal;
     private Node currNode;
-    private Set<String> explored;
+    private Set<Node> explored;
     private Deque<Node> frontier;
 
     public String solve(byte[] data, int width, int length, char[] order) {
@@ -39,9 +39,8 @@ public class BFSSolver {
 
     private void hashNode(Node node) {
         if (node != null) {
-            String nextStr = Arrays.toString(node.board.data);
-            if (!explored.contains(nextStr)) {
-                explored.add(nextStr);
+            if (!explored.contains(node)) {
+                explored.add(node);
                 frontier.add(node);
             }
         }

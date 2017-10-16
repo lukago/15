@@ -4,29 +4,35 @@ import java.util.*;
 
 public class DFSSolver {
 
-    private final int maxDepth = 11;
+    private final int MAX_DEPTH = 15;
 
     private char[] order;
     private byte[] goal;
     private Node currNode;
-    private Set<String> explored;
+    private Set<Node> explored;
     private Stack<Node> frontier;
+    private boolean solved;
+    private String solution;
 
     public String solve(byte[] data, int width, int length, char[] order) {
         init(data, width, length, order);
         hashState(currNode);
 
-        while (!frontier.isEmpty()) {
+        while (!frontier.isEmpty() || !solved) {
             currNode = frontier.pop();
-            if (isSolved(currNode)) break;
             explorePaths(currNode);
         }
 
-        return currNode.getPath();
+        return solution;
     }
 
     private void explorePaths(Node node) {
-        if (node.getDepth() < maxDepth) {
+        if (isSolved(node) && !solved) {
+            solved = true;
+            solution = node.getPath();
+        }
+
+        if (node.getDepth() < MAX_DEPTH && !solved) {
             for (char c : order) {
                 if (c == 'L') {
                     moveLeft(node);
@@ -36,15 +42,16 @@ public class DFSSolver {
                     moveUp(node);
                 } else if (c == 'D') {
                     moveDown(node);
+                } else {
+                    moveLeft(node);
                 }
             }
         }
     }
 
     private void hashState(Node node) {
-        String nextStr = Arrays.toString(node.board.data);
-        if (!explored.contains(nextStr)) {
-            explored.add(nextStr);
+        if (!explored.contains(node)) {
+            explored.add(node);
             frontier.push(node);
         }
     }
@@ -91,5 +98,7 @@ public class DFSSolver {
         this.frontier = new Stack<>();
         this.goal = Utils.getGoalZeroLast(width * height);
         this.order = order.clone();
+        this.solved = false;
+        this.solution = "-1";
     }
 }
