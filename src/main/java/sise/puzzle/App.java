@@ -26,7 +26,7 @@ public class App {
             case "bfs":
                 return new BFSSolver();
             case "dfs":
-                return new DFSSolver(21);
+                return new DFSSolver(20);
             case "astr":
                 throw new IllegalArgumentException();
             default:

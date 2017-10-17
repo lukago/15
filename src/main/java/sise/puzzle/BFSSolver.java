@@ -43,11 +43,8 @@ public class BFSSolver extends Solver {
     }
 
     private void hashNode(Node node) {
-        if (node != null) {
-            if (!explored.contains(node)) {
-                explored.add(node);
-                frontier.add(node);
-            }
+        if (node != null && explored.add(node)) {
+            frontier.add(node);
         }
     }
 }

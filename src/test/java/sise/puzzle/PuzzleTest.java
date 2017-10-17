@@ -30,7 +30,7 @@ public class PuzzleTest {
 
     @Test
     public void dfsTest() {
-        DFSSolver dfsSolver = new DFSSolver(20);
+        DFSSolver dfsSolver = new DFSSolver(22);
         if (dfsSolver.MAX_DEPTH > 10) {
             Assert.assertArrayEquals(follow(dfsSolver.solve(board1, o1).path, board1), goal4);
             Assert.assertArrayEquals(follow(dfsSolver.solve(board2, o2).path, board2), goal4);

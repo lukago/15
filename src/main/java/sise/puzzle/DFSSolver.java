@@ -12,7 +12,8 @@ public class DFSSolver extends Solver {
     public Solution solve(Board board, String order) {
         long timeStart = System.currentTimeMillis();
         init(board, order);
-        hashNode(currNode);
+        explored.add(currNode);
+        frontier.push(currNode);
 
         while (!frontier.isEmpty() && !solution.solved) {
             currNode = frontier.pop();
@@ -49,16 +50,9 @@ public class DFSSolver extends Solver {
         }
     }
 
-    private void hashNode(Node node) {
-        if (!explored.contains(node)) {
-            explored.add(node);
-            frontier.push(node);
-        }
-    }
-
     private void hashNodeAndExplore(Node node) {
-        if (node != null) {
-            hashNode(node);
+        if (node != null && explored.add(node)) {
+            frontier.push(node);
             explorePaths(node);
         }
     }
