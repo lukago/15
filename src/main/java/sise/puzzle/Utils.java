@@ -10,25 +10,9 @@ import java.util.stream.Collectors;
 
 public class Utils {
 
-    public static int findZeroPos(byte[] data) {
-        for (int i = 0; i < data.length; i++) {
-            if (data[i] == 0) return i;
-        }
-        return -1;
-    }
-
-    public static byte[] genGoal(int len) {
-        byte[] goal = new byte[len];
-        for (int i = 0; i < goal.length - 1; i++) {
-            goal[i] = (byte) (i + 1);
-        }
-        goal[goal.length - 1] = 0;
-        return goal;
-    }
-
     public static Board readBoardFromFile(String path) {
-        int width = 0, height = 0;
-        byte[] data = new byte[0];
+        int width = 0, height = 0, zeroPos = 0;
+        byte[] data = null;
 
         try {
             List<int[]> lines = Files.lines(Paths.get(path))
@@ -42,23 +26,26 @@ public class Utils {
             for (int i = 1; i < lines.size(); i++) {
                 for (int j = 0; j < lines.get(i).length; j++) {
                     data[index++] = (byte) lines.get(i)[j];
+                    if (lines.get(i)[j] == 0) {
+                        zeroPos = (i - 1) * width + j;
+                    }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return boardOf(data, width, height);
+        return new Board(data, Character.MIN_VALUE, zeroPos, width, height);
     }
 
     public static void writeSolution(Solution solution, String path) {
         try (FileWriter ostream = new FileWriter(path)) {
             if (solution.path.length() > 0) {
                 ostream.write(solution.path.length() + "\n");
+                ostream.write(solution.path);
             } else {
                 ostream.write("-1");
             }
-            ostream.write(solution.path);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,8 +67,13 @@ public class Utils {
         }
     }
 
-    public static Board boardOf(byte[] data, int width, int height) {
-        return new Board(data, Character.MIN_VALUE, Utils.findZeroPos(data), width, height);
+    public static byte[] genGoal(int len) {
+        byte[] goal = new byte[len];
+        for (int i = 0; i < goal.length - 1; i++) {
+            goal[i] = (byte) (i + 1);
+        }
+        goal[goal.length - 1] = 0;
+        return goal;
     }
 
 }

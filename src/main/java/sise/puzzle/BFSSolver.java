@@ -1,18 +1,10 @@
 package sise.puzzle;
 
-import java.util.*;
-
-public class BFSSolver implements Solver {
-
-    private char[] order;
-    private byte[] goal;
-    private Node currNode;
-    private Set<Node> explored;
-    private Deque<Node> frontier;
-    private Solution solution;
+public class BFSSolver extends Solver {
 
     public Solution solve(Board board, String order) {
         long timeStart = System.currentTimeMillis();
+
         init(board, order);
         hashNode(currNode);
 
@@ -29,7 +21,7 @@ public class BFSSolver implements Solver {
     }
 
     private void explorePaths(Node node) {
-        checkMaxDepth(node);
+        solution.maxDepth = Math.max(solution.maxDepth, node.getDepth());
 
         if (isSolved(node)) {
             solution.solved = true;
@@ -57,25 +49,5 @@ public class BFSSolver implements Solver {
                 frontier.add(node);
             }
         }
-    }
-
-    private boolean isSolved(Node node) {
-        return Arrays.equals(node.board.data, goal);
-    }
-
-    private void checkMaxDepth(Node node) {
-        int nodeDepth = node.getDepth();
-        if (nodeDepth > solution.maxDepth) {
-            solution.maxDepth = nodeDepth;
-        }
-    }
-
-    private void init(Board board, String order) {
-        this.goal = Utils.genGoal(board.width * board.height);
-        this.order = order.toCharArray();
-        this.currNode = new Node(null, board);
-        this.explored = new HashSet<>();
-        this.frontier = new LinkedList<>();
-        this.solution = new Solution();
     }
 }

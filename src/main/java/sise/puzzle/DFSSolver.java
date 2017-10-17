@@ -1,25 +1,18 @@
 package sise.puzzle;
 
-import java.util.*;
+public class DFSSolver extends Solver {
 
-public class DFSSolver implements Solver {
-
-    public final int maxDepth;
-    private char[] order;
-    private byte[] goal;
-    private Node currNode;
-    private Set<Node> explored;
-    private Stack<Node> frontier;
-    private Solution solution;
+    public final int MAX_DEPTH;
 
     public DFSSolver(int maxDepth) {
-        this.maxDepth = maxDepth;
+        this.MAX_DEPTH = maxDepth;
     }
 
+    @Override
     public Solution solve(Board board, String order) {
         long timeStart = System.currentTimeMillis();
         init(board, order);
-        hashState(currNode);
+        hashNode(currNode);
 
         while (!frontier.isEmpty() && !solution.solved) {
             currNode = frontier.pop();
@@ -34,86 +27,39 @@ public class DFSSolver implements Solver {
     }
 
     private void explorePaths(Node node) {
-        checkMaxDepth(node);
+        solution.maxDepth = Math.max(solution.maxDepth, node.getDepth());
 
         if (isSolved(node) && !solution.solved) {
             solution.solved = true;
             solution.path = node.getPath();
         }
 
-        if (node.getDepth() < maxDepth && !solution.solved) {
-            for (char c : order) {
-                if (c == 'L') {
-                    moveLeft(node);
-                } else if (c == 'R') {
-                    moveRight(node);
-                } else if (c == 'U') {
-                    moveUp(node);
-                } else if (c == 'D') {
-                    moveDown(node);
-                } else {
-                    moveLeft(node);
+        if (node.getDepth() < MAX_DEPTH) {
+            for (int i = 0; i < order.length && !solution.solved; i++) {
+                if (order[i] == 'L') {
+                    hashNodeAndExplore(node.getLeftChild());
+                } else if (order[i] == 'R') {
+                    hashNodeAndExplore(node.getRightChild());
+                } else if (order[i] == 'U') {
+                    hashNodeAndExplore(node.getUpChild());
+                } else if (order[i] == 'D') {
+                    hashNodeAndExplore(node.getDownChild());
                 }
             }
         }
     }
 
-    private void hashState(Node node) {
+    private void hashNode(Node node) {
         if (!explored.contains(node)) {
             explored.add(node);
             frontier.push(node);
         }
     }
 
-    private void moveLeft(Node node) {
-        node = node.getLeftChild();
+    private void hashNodeAndExplore(Node node) {
         if (node != null) {
-            hashState(node);
+            hashNode(node);
             explorePaths(node);
         }
-    }
-
-    private void moveRight(Node node) {
-        node = node.getRightChild();
-        if (node != null) {
-            hashState(node);
-            explorePaths(node);
-        }
-    }
-
-    private void moveUp(Node node) {
-        node = node.getUpChild();
-        if (node != null) {
-            hashState(node);
-            explorePaths(node);
-        }
-    }
-
-    private void moveDown(Node node) {
-        node = node.getDownChild();
-        if (node != null) {
-            hashState(node);
-            explorePaths(node);
-        }
-    }
-
-    private boolean isSolved(Node node) {
-        return Arrays.equals(node.board.data, goal);
-    }
-
-    private void checkMaxDepth(Node node) {
-        int nodeDepth = node.getDepth();
-        if (nodeDepth > solution.maxDepth) {
-            solution.maxDepth = nodeDepth;
-        }
-    }
-
-    private void init(Board board, String order) {
-        this.goal = Utils.genGoal(board.width * board.height);
-        this.order = order.toCharArray();
-        this.currNode = new Node(null, board);
-        this.explored = new HashSet<>();
-        this.frontier = new Stack<>();
-        this.solution = new Solution();
     }
 }

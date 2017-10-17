@@ -13,24 +13,24 @@ public class App {
         String resPath = args[3];
         String statPath = args[4];
 
-        Solver solver;
-        switch (alg) {
-            case "bfs":
-                solver = new BFSSolver();
-                break;
-            case "dfs":
-                solver = new DFSSolver(21);
-                break;
-            default:
-                solver = new BFSSolver();
-                break;
-        }
-
+        Solver solver = parseSolver(alg);
         Board board = Utils.readBoardFromFile(dataPath);
-        Solution solution = solver.solve(board, order);
         System.out.println(String.format("Solving %s %s %s...", alg, order, dataPath));
+        Solution solution = solver.solve(board, order);
         Utils.writeSolution(solution, resPath);
         Utils.writeStats(solution, statPath);
     }
 
+    private static Solver parseSolver(String arg) {
+        switch (arg) {
+            case "bfs":
+                return new BFSSolver();
+            case "dfs":
+                return new DFSSolver(21);
+            case "astr":
+                throw new IllegalArgumentException();
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
 }
