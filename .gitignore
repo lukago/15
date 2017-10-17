@@ -2,4 +2,4 @@
 target/
 *.jar
 *.iml
-data/gen/
+data/*.txt

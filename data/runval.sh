@@ -20,7 +20,11 @@
 # actual program, using the absolute (or relative) path, for example:
 #  progcmd="java -jar /home/user/15puzzle/bin/puzzleval.jar"
 
-progcmd='echo program'
+# faster linux shell alternative to count not found solutions, assuming algorihm
+# corretly know it hasn't found it:
+# grep -nw *sol.txt -e '-1' | wc -l
+
+progcmd='java -jar /home/admin/studbaza/sem_5/sise/fifteen-puzzle/data/puzzleval.jar'
 sol_filename_regex='^([a-zA-Z0-9]+_[0-9]+_[0-9]+)_[a-zA-Z]+_[a-zA-Z]+_sol.txt$'
 
 n_correct_sols=0

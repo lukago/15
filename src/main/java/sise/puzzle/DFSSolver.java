@@ -4,44 +4,44 @@ import java.util.*;
 
 public class DFSSolver implements Solver {
 
-    private final int MAX_DEPTH = 25;
-
+    public final int maxDepth;
     private char[] order;
     private byte[] goal;
     private Node currNode;
     private Set<Node> explored;
     private Stack<Node> frontier;
-    private boolean solved;
-    private String path;
-    private int maxDepthReached;
+    private Solution solution;
+
+    public DFSSolver(int maxDepth) {
+        this.maxDepth = maxDepth;
+    }
 
     public Solution solve(Board board, String order) {
-        long time = System.currentTimeMillis();
+        long timeStart = System.currentTimeMillis();
         init(board, order);
         hashState(currNode);
 
-        while (!frontier.isEmpty() || !solved) {
+        while (!frontier.isEmpty() && !solution.solved) {
             currNode = frontier.pop();
             explorePaths(currNode);
         }
 
-        return new Solution(
-                path,
-                System.currentTimeMillis() - time,
-                maxDepthReached,
-                explored.size(),
-                explored.size() - frontier.size());
+        solution.timeMillis = System.currentTimeMillis() - timeStart;
+        solution.finishedNum = explored.size();
+        solution.visitedNum = explored.size() - frontier.size();
+
+        return solution;
     }
 
     private void explorePaths(Node node) {
         checkMaxDepth(node);
 
-        if (isSolved(node) && !solved) {
-            solved = true;
-            path = node.getPath();
+        if (isSolved(node) && !solution.solved) {
+            solution.solved = true;
+            solution.path = node.getPath();
         }
 
-        if (node.getDepth() < MAX_DEPTH && !solved) {
+        if (node.getDepth() < maxDepth && !solution.solved) {
             for (char c : order) {
                 if (c == 'L') {
                     moveLeft(node);
@@ -103,19 +103,17 @@ public class DFSSolver implements Solver {
 
     private void checkMaxDepth(Node node) {
         int nodeDepth = node.getDepth();
-        if (nodeDepth > maxDepthReached) {
-            maxDepthReached = nodeDepth;
+        if (nodeDepth > solution.maxDepth) {
+            solution.maxDepth = nodeDepth;
         }
     }
 
     private void init(Board board, String order) {
+        this.goal = Utils.genGoal(board.width * board.height);
+        this.order = order.toCharArray();
         this.currNode = new Node(null, board);
         this.explored = new HashSet<>();
         this.frontier = new Stack<>();
-        this.goal = Utils.genGoal(board.width * board.height);
-        this.order = order.toCharArray();
-        this.solved = false;
-        this.path = "";
-        this.maxDepthReached = 0;
+        this.solution = new Solution();
     }
 }

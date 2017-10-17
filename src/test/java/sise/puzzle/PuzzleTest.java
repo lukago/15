@@ -1,8 +1,7 @@
-package sise.puzzle.test;
+package sise.puzzle;
 
 import org.junit.Assert;
 import org.junit.Test;
-import sise.puzzle.*;
 
 public class PuzzleTest {
     final String testfilePath1 = getClass().getClassLoader().getResource("4x4_01_t1.txt").getPath();
@@ -22,21 +21,23 @@ public class PuzzleTest {
     @Test
     public void bfsTest() {
         BFSSolver bfsSolver = new BFSSolver();
-        Assert.assertArrayEquals(follow(bfsSolver.solve(board1, o1).getPath(), board1), goal4);
-        Assert.assertArrayEquals(follow(bfsSolver.solve(board2, o2).getPath(), board2), goal4);
-        Assert.assertArrayEquals(follow(bfsSolver.solve(board3, o1).getPath(), board3), goal4);
-        Assert.assertArrayEquals(follow(bfsSolver.solve(board4, o2).getPath(), board4), goal4);
-        Assert.assertArrayEquals(follow(bfsSolver.solve(board5, o2).getPath(), board5), goal3);
+        Assert.assertArrayEquals(follow(bfsSolver.solve(board1, o1).path, board1), goal4);
+        Assert.assertArrayEquals(follow(bfsSolver.solve(board2, o2).path, board2), goal4);
+        Assert.assertArrayEquals(follow(bfsSolver.solve(board3, o1).path, board3), goal4);
+        Assert.assertArrayEquals(follow(bfsSolver.solve(board4, o2).path, board4), goal4);
+        Assert.assertArrayEquals(follow(bfsSolver.solve(board5, o2).path, board5), goal3);
     }
 
     @Test
     public void dfsTest() {
-        DFSSolver dfsSolver = new DFSSolver();
-        Assert.assertArrayEquals(follow(dfsSolver.solve(board1, o1).getPath(), board1), goal4);
-        Assert.assertArrayEquals(follow(dfsSolver.solve(board2, o2).getPath(), board2), goal4);
-        Assert.assertArrayEquals(follow(dfsSolver.solve(board3, o1).getPath(), board3), goal4);
-        Assert.assertArrayEquals(follow(dfsSolver.solve(board4, o2).getPath(), board4), goal4);
-        Assert.assertArrayEquals(follow(dfsSolver.solve(board5, o2).getPath(), board5), goal3);
+        DFSSolver dfsSolver = new DFSSolver(20);
+        if (dfsSolver.maxDepth > 10) {
+            Assert.assertArrayEquals(follow(dfsSolver.solve(board1, o1).path, board1), goal4);
+            Assert.assertArrayEquals(follow(dfsSolver.solve(board2, o2).path, board2), goal4);
+            Assert.assertArrayEquals(follow(dfsSolver.solve(board3, o1).path, board3), goal4);
+            Assert.assertArrayEquals(follow(dfsSolver.solve(board4, o2).path, board4), goal4);
+            Assert.assertArrayEquals(follow(dfsSolver.solve(board5, o2).path, board5), goal3);
+        }
     }
 
     private byte[] follow(String res, Board board) {
@@ -54,6 +55,6 @@ public class PuzzleTest {
             }
         }
 
-        return node.getData();
+        return node.board.data;
     }
 }

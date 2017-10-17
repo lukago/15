@@ -72,10 +72,6 @@ public class Node {
         return depth;
     }
 
-    public byte[] getData() {
-        return board.data;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

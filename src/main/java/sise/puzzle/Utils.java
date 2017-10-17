@@ -53,12 +53,12 @@ public class Utils {
 
     public static void writeSolution(Solution solution, String path) {
         try (FileWriter ostream = new FileWriter(path)) {
-            if (solution.getPath().length() > 0) {
-                ostream.write(solution.getPath().length() + "\n");
+            if (solution.path.length() > 0) {
+                ostream.write(solution.path.length() + "\n");
             } else {
-                ostream.write("-1\n");
+                ostream.write("-1");
             }
-            ostream.write(solution.getPath());
+            ostream.write(solution.path);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,15 +66,15 @@ public class Utils {
 
     public static void writeStats(Solution solution, String path) {
         try (FileWriter ostream = new FileWriter(path)) {
-            if (solution.getPath().length() > 0) {
-                ostream.write(solution.getPath().length() + "\n");
+            if (solution.path.length() > 0) {
+                ostream.write(solution.path.length() + "\n");
             } else {
                 ostream.write("-1\n");
             }
-            ostream.write(solution.getVisitedNum() + "\n");
-            ostream.write(solution.getFinishedNum() + "\n");
-            ostream.write(solution.getMaxDepth() + "\n");
-            ostream.write(solution.getTimeMillis() + "\n");
+            ostream.write(solution.visitedNum + "\n");
+            ostream.write(solution.finishedNum + "\n");
+            ostream.write(solution.maxDepth + "\n");
+            ostream.write(solution.timeMillis + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
