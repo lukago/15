@@ -7,7 +7,7 @@ public class Board {
     byte width;
     char prevMove;
     int zeroIndex;
-    int fScore;
+    int heuristicScore;
 
     public Board(byte[] data, char prevMove, int zeroIndex, int width, int height) {
         this.data = data.clone();
@@ -15,6 +15,6 @@ public class Board {
         this.zeroIndex = zeroIndex;
         this.height = (byte) height;
         this.width = (byte) width;
-        this.fScore = 0;
+        this.heuristicScore = 0;
     }
 }

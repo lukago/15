@@ -12,6 +12,7 @@ public class DFSSolver extends Solver {
     public Solution solve(Board board, String order) {
         long timeStart = System.nanoTime();
         init(board, order);
+
         explored.add(currNode);
         frontier.push(currNode);
 
@@ -21,9 +22,6 @@ public class DFSSolver extends Solver {
         }
 
         solution.timeNanos = System.nanoTime() - timeStart;
-        solution.finishedNum = explored.size();
-        solution.visitedNum = explored.size() - frontier.size();
-
         return solution;
     }
 
@@ -48,10 +46,13 @@ public class DFSSolver extends Solver {
                 }
             }
         }
+
+        solution.finishedNum++;
     }
 
     private void hashNodeAndExplore(Node node) {
         if (node != null && explored.add(node)) {
+            solution.visitedNum++;
             frontier.push(node);
             explorePaths(node);
         }

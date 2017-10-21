@@ -10,26 +10,33 @@ public class AstarSolver extends Solver {
     private Set<Node> frontier;
 
     @Override
+    protected void init(Board board, String order) {
+        super.init(board, order);
+        this.useHamm = order.equals("hamm");
+        this.frontier = new HashSet<>();
+    }
+
+    @Override
     public Solution solve(Board board, String order) {
         long timeStart = System.nanoTime();
-
         init(board, order);
+
+        explored.add(currNode);
         frontier.add(currNode);
 
         while (!frontier.isEmpty() && !solution.solved) {
-            currNode = Collections.min(frontier, (a, b) -> a.board.fScore - b.board.fScore);
+            currNode = Collections.min(frontier, (a, b) -> a.board.heuristicScore - b.board.heuristicScore);
             frontier.remove(currNode);
             explorePaths(currNode);
         }
 
         solution.timeNanos = System.nanoTime() - timeStart;
-        solution.finishedNum = explored.size();
-        solution.visitedNum = explored.size() - frontier.size();
-
         return solution;
     }
 
     private void explorePaths(Node node) {
+        solution.maxDepth = Math.max(solution.maxDepth, node.getDepth());
+
         if (isSolved(node)) {
             solution.solved = true;
             solution.path = node.getPath();
@@ -39,17 +46,21 @@ public class AstarSolver extends Solver {
         Node[] neighbours = node.getNeighbours();
         for (Node neighbour : neighbours) {
             if (neighbour != null && explored.add(neighbour)) {
-                neighbour.board.fScore = neighbour.getDepth();
-                neighbour.board.fScore += useHamm ? hammingDist(neighbour) : manhattanDist(neighbour);
+                neighbour.board.heuristicScore = neighbour.getDepth();
+                neighbour.board.heuristicScore += useHamm ? hammingDist(neighbour) : manhattanDist(neighbour);
                 frontier.add(neighbour);
+                solution.visitedNum++;
             }
         }
+
+        solution.finishedNum++;
     }
 
     private int hammingDist(Node node) {
         int dist = 0;
         for (int i = 0; i < node.board.data.length; i++) {
-            if (node.board.data[i] != goal[i]) dist++;
+            if (node.board.data[i] != goal[i])
+                dist++;
         }
         return dist;
     }
@@ -59,7 +70,7 @@ public class AstarSolver extends Solver {
 
         for (int i = 0; i < node.board.data.length; i++) {
             if (node.board.data[i] != goal[i]) {
-                int goalPos = findPosInGoal(node.board.data[i]);
+                int goalPos = Utils.indexOf(goal, node.board.data[i]);
                 dataX = i % node.board.width;
                 dataY = i / node.board.width;
                 goalX = goalPos % node.board.width;
@@ -69,21 +80,5 @@ public class AstarSolver extends Solver {
         }
 
         return dist;
-    }
-
-    private int findPosInGoal(int value) {
-        for (int i = 0; i < goal.length; i++) {
-            if (goal[i] == value) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    @Override
-    protected void init(Board board, String order) {
-        super.init(board, order);
-        this.useHamm = order.equals("hamm");
-        this.frontier = new HashSet<>();
     }
 }

@@ -57,7 +57,6 @@ public class Node {
     }
 
     public Node[] getNeighbours() {
-        int newLen = 0;
         Node[] nodes = {getDownChild(), getUpChild(), getLeftChild(), getRightChild()};
         return nodes;
     }

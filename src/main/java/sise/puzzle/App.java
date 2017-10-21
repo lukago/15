@@ -5,11 +5,14 @@ import sise.puzzle.solver.*;
 public class App {
 
     /**
-     * Runs the solver with given args
+     * Runs the solver with given args.
      *
-     * @param args {astr,bfs,dfs} {permutation of LRDR,manh,hamm}, {path to file with board data},
-     *             {path to save results}, {path to save stats}
+     * example runcmd:
+     * java -jar solver.jar bfs RLUD data.txt res.txt stat.txt;
+     * java -jar solver.jar astr hamm dir/data.txt dir/res.txt dir/stat.txt
      *
+     * @param args {astr,bfs,dfs} {permutation of LRDU for bfs/dfs, manh/hamm for astr},
+     *             {path to file with board data}, {path to save results}, {path to save stats}
      */
     public static void main(String[] args) {
         parseArgs(args);

@@ -4,9 +4,10 @@ public class BFSSolver extends Solver {
 
     public Solution solve(Board board, String order) {
         long timeStart = System.nanoTime();
-
         init(board, order);
-        hashNode(currNode);
+
+        explored.add(currNode);
+        frontier.push(currNode);
 
         while (!frontier.isEmpty() && !solution.solved) {
             currNode = frontier.remove();
@@ -14,9 +15,6 @@ public class BFSSolver extends Solver {
         }
 
         solution.timeNanos = System.nanoTime() - timeStart;
-        solution.finishedNum = explored.size();
-        solution.visitedNum = explored.size() - frontier.size();
-
         return solution;
     }
 
@@ -40,10 +38,13 @@ public class BFSSolver extends Solver {
                 hashNode(node.getDownChild());
             }
         }
+
+        solution.finishedNum++;
     }
 
     private void hashNode(Node node) {
         if (node != null && explored.add(node)) {
+            solution.visitedNum++;
             frontier.add(node);
         }
     }
