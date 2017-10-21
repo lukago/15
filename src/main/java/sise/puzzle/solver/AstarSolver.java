@@ -23,6 +23,7 @@ public class AstarSolver extends Solver {
 
         explored.add(currNode);
         frontier.add(currNode);
+        solution.visitedNum++;
 
         while (!frontier.isEmpty() && !solution.solved) {
             currNode = Collections.min(frontier, (a, b) -> a.board.heuristicScore - b.board.heuristicScore);

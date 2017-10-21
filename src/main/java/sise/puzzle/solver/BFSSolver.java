@@ -8,6 +8,7 @@ public class BFSSolver extends Solver {
 
         explored.add(currNode);
         frontier.push(currNode);
+        solution.visitedNum++;
 
         while (!frontier.isEmpty() && !solution.solved) {
             currNode = frontier.remove();

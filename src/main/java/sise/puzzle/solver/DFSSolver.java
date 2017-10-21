@@ -15,6 +15,7 @@ public class DFSSolver extends Solver {
 
         explored.add(currNode);
         frontier.push(currNode);
+        solution.visitedNum++;
 
         while (!frontier.isEmpty() && !solution.solved) {
             currNode = frontier.pop();
@@ -45,9 +46,8 @@ public class DFSSolver extends Solver {
                     hashNodeAndExplore(node.getDownChild());
                 }
             }
+            solution.finishedNum++;
         }
-
-        solution.finishedNum++;
     }
 
     private void hashNodeAndExplore(Node node) {
