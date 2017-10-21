@@ -7,6 +7,7 @@ public class Board {
     byte width;
     char prevMove;
     int zeroIndex;
+    int fScore;
 
     public Board(byte[] data, char prevMove, int zeroIndex, int width, int height) {
         this.data = data.clone();
@@ -14,11 +15,6 @@ public class Board {
         this.zeroIndex = zeroIndex;
         this.height = (byte) height;
         this.width = (byte) width;
-    }
-
-    public void swapZero(int index) {
-        data[zeroIndex] = data[index];
-        data[index] = 0;
-        zeroIndex = index;
+        this.fScore = 0;
     }
 }

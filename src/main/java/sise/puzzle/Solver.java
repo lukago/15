@@ -8,7 +8,7 @@ public abstract class Solver {
     protected byte[] goal;
     protected Node currNode;
     protected Set<Node> explored;
-    protected Deque<Node> frontier;
+    protected LinkedList<Node> frontier;
     protected Solution solution;
 
     public abstract Solution solve(Board board, String order);

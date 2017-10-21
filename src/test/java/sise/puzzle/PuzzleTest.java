@@ -20,6 +20,7 @@ public class PuzzleTest {
 
     @Test
     public void bfsTest() {
+        System.out.println("bfs");
         BFSSolver bfsSolver = new BFSSolver();
         Assert.assertArrayEquals(follow(bfsSolver.solve(board1, o1).path, board1), goal4);
         Assert.assertArrayEquals(follow(bfsSolver.solve(board2, o2).path, board2), goal4);
@@ -30,6 +31,7 @@ public class PuzzleTest {
 
     @Test
     public void dfsTest() {
+        System.out.println("dfs");
         DFSSolver dfsSolver = new DFSSolver(22);
         if (dfsSolver.MAX_DEPTH > 10) {
             Assert.assertArrayEquals(follow(dfsSolver.solve(board1, o1).path, board1), goal4);
@@ -38,6 +40,17 @@ public class PuzzleTest {
             Assert.assertArrayEquals(follow(dfsSolver.solve(board4, o2).path, board4), goal4);
             Assert.assertArrayEquals(follow(dfsSolver.solve(board5, o2).path, board5), goal3);
         }
+    }
+
+    @Test
+    public void astrTest() {
+        System.out.println("astar");
+        AstarSolver astarSolver = new AstarSolver();
+        Assert.assertArrayEquals(follow(astarSolver.solve(board1, o1).path, board1), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board2, o2).path, board2), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board3, o1).path, board3), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board4, o2).path, board4), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board5, o2).path, board5), goal3);
     }
 
     private byte[] follow(String res, Board board) {

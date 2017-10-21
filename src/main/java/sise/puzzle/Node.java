@@ -1,6 +1,8 @@
 package sise.puzzle;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Node {
 
@@ -14,10 +16,10 @@ public class Node {
 
     public Node getLeftChild() {
         if (board.zeroIndex % board.width != 0) {
-            board.swapZero(board.zeroIndex - 1);
+            swapZero(board.zeroIndex - 1);
             Board childBoard = new Board(board.data, 'L', board.zeroIndex, board.width, board.height);
             Node child = new Node(this, childBoard);
-            board.swapZero(board.zeroIndex + 1);
+            swapZero(board.zeroIndex + 1);
             return child;
         }
         return null;
@@ -25,10 +27,10 @@ public class Node {
 
     public Node getRightChild() {
         if ((board.zeroIndex - board.width + 1) % board.width != 0) {
-            board.swapZero(board.zeroIndex + 1);
+            swapZero(board.zeroIndex + 1);
             Board childBoard = new Board(board.data, 'R', board.zeroIndex, board.width, board.height);
             Node child = new Node(this, childBoard);
-            board.swapZero(board.zeroIndex - 1);
+            swapZero(board.zeroIndex - 1);
             return child;
         }
         return null;
@@ -36,10 +38,10 @@ public class Node {
 
     public Node getUpChild() {
         if ((board.zeroIndex - board.width + 1) > 0) {
-            board.swapZero(board.zeroIndex - board.width);
+            swapZero(board.zeroIndex - board.width);
             Board childBoard = new Board(board.data, 'U', board.zeroIndex, board.width, board.height);
             Node child = new Node(this, childBoard);
-            board.swapZero(board.zeroIndex + board.width);
+            swapZero(board.zeroIndex + board.width);
             return child;
         }
         return null;
@@ -47,13 +49,23 @@ public class Node {
 
     public Node getDownChild() {
         if (board.zeroIndex - (board.width * board.height - board.width) < 0) {
-            board.swapZero(board.zeroIndex + board.width);
+            swapZero(board.zeroIndex + board.width);
             Board childBoard = new Board(board.data, 'D', board.zeroIndex, board.width, board.height);
             Node child = new Node(this, childBoard);
-            board.swapZero(board.zeroIndex - board.width);
+            swapZero(board.zeroIndex - board.width);
             return child;
         }
         return null;
+    }
+
+    public List<Node> getNeighbours() {
+        Node[] nodes = {getDownChild(), getUpChild(), getLeftChild(), getRightChild()};
+        List<Node> nodesNotNull = new ArrayList<>();
+        for (Node node : nodes) {
+            if (node != null)
+                nodesNotNull.add(node);
+        }
+        return nodesNotNull;
     }
 
     public String getPath() {
@@ -85,5 +97,11 @@ public class Node {
     @Override
     public int hashCode() {
         return Arrays.hashCode(board.data);
+    }
+
+    private void swapZero(int index) {
+        board.data[board.zeroIndex] = board.data[index];
+        board.data[index] = 0;
+        board.zeroIndex = index;
     }
 }
