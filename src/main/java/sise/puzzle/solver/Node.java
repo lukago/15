@@ -1,8 +1,6 @@
-package sise.puzzle;
+package sise.puzzle.solver;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Node {
 
@@ -58,14 +56,10 @@ public class Node {
         return null;
     }
 
-    public List<Node> getNeighbours() {
+    public Node[] getNeighbours() {
+        int newLen = 0;
         Node[] nodes = {getDownChild(), getUpChild(), getLeftChild(), getRightChild()};
-        List<Node> nodesNotNull = new ArrayList<>();
-        for (Node node : nodes) {
-            if (node != null)
-                nodesNotNull.add(node);
-        }
-        return nodesNotNull;
+        return nodes;
     }
 
     public String getPath() {

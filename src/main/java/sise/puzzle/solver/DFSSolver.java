@@ -1,4 +1,4 @@
-package sise.puzzle;
+package sise.puzzle.solver;
 
 public class DFSSolver extends Solver {
 

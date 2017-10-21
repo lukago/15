@@ -1,9 +1,13 @@
-package sise.puzzle;
+package sise.puzzle.solver;
 
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AstarSolver extends Solver {
+
+    private boolean useHamm;
+    private Set<Node> frontier;
 
     @Override
     public Solution solve(Board board, String order) {
@@ -11,32 +15,11 @@ public class AstarSolver extends Solver {
 
         init(board, order);
         frontier.add(currNode);
-        explored.add(currNode);
 
-        while (!frontier.isEmpty()) {
-            currNode = getNodeWithMinFscore();
-            if (isSolved(currNode)) {
-                solution.solved = true;
-                solution.path = currNode.getPath();
-                break;
-            }
-
+        while (!frontier.isEmpty() && !solution.solved) {
+            currNode = Collections.min(frontier, (a, b) -> a.board.fScore - b.board.fScore);
             frontier.remove(currNode);
-
-            for (Node neighbour : currNode.getNeighbours()) {
-                if (explored.contains(neighbour))
-                    continue;
-
-                if (!explored.contains(neighbour)) {
-                    if (Objects.equals(order, "manh")) {
-                        neighbour.board.fScore = neighbour.getDepth() + manhattanDist(neighbour);
-                    } else if (Objects.equals(order, "hamm")){
-                        neighbour.board.fScore = neighbour.getDepth() + hammingDist(neighbour);
-                    }
-                    frontier.add(neighbour);
-                    explored.add(neighbour);
-                }
-            }
+            explorePaths(currNode);
         }
 
         solution.timeMillis = System.currentTimeMillis() - timeStart;
@@ -46,10 +29,21 @@ public class AstarSolver extends Solver {
         return solution;
     }
 
-    private Node getNodeWithMinFscore() {
-        return frontier.stream()
-                .min(Comparator.comparingInt(a -> a.board.fScore))
-                .get();
+    private void explorePaths(Node node) {
+        if (isSolved(node)) {
+            solution.solved = true;
+            solution.path = node.getPath();
+            return;
+        }
+
+        Node[] neighbours = node.getNeighbours();
+        for (Node neighbour : neighbours) {
+            if (neighbour != null && explored.add(neighbour)) {
+                neighbour.board.fScore = neighbour.getDepth();
+                neighbour.board.fScore += useHamm ? hammingDist(neighbour) : manhattanDist(neighbour);
+                frontier.add(neighbour);
+            }
+        }
     }
 
     private int hammingDist(Node node) {
@@ -86,5 +80,10 @@ public class AstarSolver extends Solver {
         return -1;
     }
 
-
+    @Override
+    protected void init(Board board, String order) {
+        super.init(board, order);
+        this.useHamm = order.equals("hamm");
+        this.frontier = new HashSet<>();
+    }
 }

@@ -1,4 +1,4 @@
-package sise.puzzle;
+package sise.puzzle.solver;
 
 import java.io.FileWriter;
 import java.io.IOException;

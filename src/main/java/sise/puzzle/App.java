@@ -1,5 +1,7 @@
 package sise.puzzle;
 
+import sise.puzzle.solver.*;
+
 public class App {
 
     public static void main(String[] args) {

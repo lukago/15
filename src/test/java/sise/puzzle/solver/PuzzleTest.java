@@ -1,4 +1,4 @@
-package sise.puzzle;
+package sise.puzzle.solver;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,6 +9,8 @@ public class PuzzleTest {
 
     final String o1 = "LRUD";
     final String o2 = "ULRD";
+    final String h1 = "hamm";
+    final String h2 = "manh";
     final byte[] goal3 = Utils.genGoal(9);
     final byte[] goal4 = Utils.genGoal(16);
 
@@ -32,7 +34,7 @@ public class PuzzleTest {
     @Test
     public void dfsTest() {
         System.out.println("dfs");
-        DFSSolver dfsSolver = new DFSSolver(22);
+        DFSSolver dfsSolver = new DFSSolver(21);
         if (dfsSolver.MAX_DEPTH > 10) {
             Assert.assertArrayEquals(follow(dfsSolver.solve(board1, o1).path, board1), goal4);
             Assert.assertArrayEquals(follow(dfsSolver.solve(board2, o2).path, board2), goal4);
@@ -43,14 +45,25 @@ public class PuzzleTest {
     }
 
     @Test
-    public void astrTest() {
-        System.out.println("astar");
+    public void astrTestHamm() {
+        System.out.println("astar hamm");
         AstarSolver astarSolver = new AstarSolver();
-        Assert.assertArrayEquals(follow(astarSolver.solve(board1, o1).path, board1), goal4);
-        Assert.assertArrayEquals(follow(astarSolver.solve(board2, o2).path, board2), goal4);
-        Assert.assertArrayEquals(follow(astarSolver.solve(board3, o1).path, board3), goal4);
-        Assert.assertArrayEquals(follow(astarSolver.solve(board4, o2).path, board4), goal4);
-        Assert.assertArrayEquals(follow(astarSolver.solve(board5, o2).path, board5), goal3);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board1, h1).path, board1), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board2, h1).path, board2), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board3, h1).path, board3), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board4, h1).path, board4), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board5, h1).path, board5), goal3);
+    }
+
+    @Test
+    public void astrTestManh() {
+        System.out.println("astar manh");
+        AstarSolver astarSolver = new AstarSolver();
+        Assert.assertArrayEquals(follow(astarSolver.solve(board1, h2).path, board1), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board2, h2).path, board2), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board3, h2).path, board3), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board4, h2).path, board4), goal4);
+        Assert.assertArrayEquals(follow(astarSolver.solve(board5, h2).path, board5), goal3);
     }
 
     private byte[] follow(String res, Board board) {
