@@ -4,6 +4,13 @@ import sise.puzzle.solver.*;
 
 public class App {
 
+    /**
+     * Runs the solver with given args
+     *
+     * @param args {astr,bfs,dfs} {permutation of LRDR,manh,hamm}, {path to file with board data},
+     *             {path to save results}, {path to save stats}
+     *
+     */
     public static void main(String[] args) {
         parseArgs(args);
     }
@@ -30,7 +37,7 @@ public class App {
             case "dfs":
                 return new DFSSolver(20);
             case "astr":
-                throw new IllegalArgumentException();
+                return new AstarSolver();
             default:
                 throw new IllegalArgumentException();
         }

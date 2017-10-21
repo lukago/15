@@ -4,12 +4,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Utils {
 
+    /**
+     * Reads board data from file.
+     * 1st row: "{width} {height}"
+     * 2nd - {height} row: space separated values of board row
+     * @param path path to file with board
+     * @return board object
+     */
     public static Board readBoardFromFile(String path) {
         int width = 0, height = 0, zeroPos = 0;
         byte[] data = null;
@@ -38,6 +46,13 @@ public class Utils {
         return new Board(data, Character.MIN_VALUE, zeroPos, width, height);
     }
 
+    /**
+     * Writes solver solution to file.
+     * 1st line: solution length or -1 if not found
+     * 2nd line: solution path if found
+     * @param solution calculated solution
+     * @param path path where to save file
+     */
     public static void writeSolution(Solution solution, String path) {
         try (FileWriter ostream = new FileWriter(path)) {
             if (solution.path.length() > 0) {
@@ -51,6 +66,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Writes stats of solution to file (time as millis).
+     * @param solution calculated solution
+     * @param path path where to save file
+     */
     public static void writeStats(Solution solution, String path) {
         try (FileWriter ostream = new FileWriter(path)) {
             if (solution.path.length() > 0) {
@@ -61,12 +81,20 @@ public class Utils {
             ostream.write(solution.visitedNum + "\n");
             ostream.write(solution.finishedNum + "\n");
             ostream.write(solution.maxDepth + "\n");
-            ostream.write(solution.timeMillis + "\n");
+
+            double timeMillis = solution.timeNanos / 1000.0;
+            DecimalFormat threeDigits = new DecimalFormat("#0.000");
+            ostream.write(threeDigits.format(timeMillis) + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Generates goal array based on board size
+     * @param len width * height of board
+     * @return goal array - from one to len - 1, zero last
+     */
     public static byte[] genGoal(int len) {
         byte[] goal = new byte[len];
         for (int i = 0; i < goal.length - 1; i++) {

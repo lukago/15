@@ -10,7 +10,7 @@ public class DFSSolver extends Solver {
 
     @Override
     public Solution solve(Board board, String order) {
-        long timeStart = System.currentTimeMillis();
+        long timeStart = System.nanoTime();
         init(board, order);
         explored.add(currNode);
         frontier.push(currNode);
@@ -20,7 +20,7 @@ public class DFSSolver extends Solver {
             explorePaths(currNode);
         }
 
-        solution.timeMillis = System.currentTimeMillis() - timeStart;
+        solution.timeNanos = System.nanoTime() - timeStart;
         solution.finishedNum = explored.size();
         solution.visitedNum = explored.size() - frontier.size();
 

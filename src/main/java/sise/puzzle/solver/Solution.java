@@ -3,7 +3,7 @@ package sise.puzzle.solver;
 public class Solution {
 
     String path;
-    long timeMillis;
+    long timeNanos;
     int maxDepth;
     int visitedNum;
     int finishedNum;

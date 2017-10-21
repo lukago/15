@@ -1,5 +1,3 @@
 .idea/
 target/
-*.jar
-*.iml
-data/*.txt
+data/
