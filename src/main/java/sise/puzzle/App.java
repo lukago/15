@@ -38,7 +38,7 @@ public class App {
             case "bfs":
                 return new BFSSolver();
             case "dfs":
-                return new DFSSolver(20);
+                return new DFSSolver();
             case "astr":
                 return new AstarSolver();
             default:

@@ -2,11 +2,7 @@ package sise.puzzle.solver;
 
 public class DFSSolver extends Solver {
 
-    public final int MAX_DEPTH;
-
-    public DFSSolver(int maxDepth) {
-        this.MAX_DEPTH = maxDepth;
-    }
+    public final int MAX_DEPTH = 21;
 
     @Override
     public Solution solve(Board board, String order) {

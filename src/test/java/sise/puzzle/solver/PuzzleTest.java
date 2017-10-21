@@ -34,14 +34,12 @@ public class PuzzleTest {
     @Test
     public void dfsTest() {
         System.out.println("dfs");
-        DFSSolver dfsSolver = new DFSSolver(21);
-        if (dfsSolver.MAX_DEPTH > 10) {
-            Assert.assertArrayEquals(follow(dfsSolver.solve(board1, o1).path, board1), goal4);
-            Assert.assertArrayEquals(follow(dfsSolver.solve(board2, o2).path, board2), goal4);
-            Assert.assertArrayEquals(follow(dfsSolver.solve(board3, o1).path, board3), goal4);
-            Assert.assertArrayEquals(follow(dfsSolver.solve(board4, o2).path, board4), goal4);
-            Assert.assertArrayEquals(follow(dfsSolver.solve(board5, o2).path, board5), goal3);
-        }
+        DFSSolver dfsSolver = new DFSSolver();
+        Assert.assertArrayEquals(follow(dfsSolver.solve(board1, o1).path, board1), goal4);
+        Assert.assertArrayEquals(follow(dfsSolver.solve(board2, o2).path, board2), goal4);
+        Assert.assertArrayEquals(follow(dfsSolver.solve(board3, o1).path, board3), goal4);
+        Assert.assertArrayEquals(follow(dfsSolver.solve(board4, o2).path, board4), goal4);
+        Assert.assertArrayEquals(follow(dfsSolver.solve(board5, o2).path, board5), goal3);
     }
 
     @Test
