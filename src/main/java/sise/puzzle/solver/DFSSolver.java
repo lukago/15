@@ -1,8 +1,19 @@
 package sise.puzzle.solver;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DFSSolver extends Solver {
 
-    public final int MAX_DEPTH = 22;
+    public final int MAX_DEPTH = 20;
+
+    private Map<Node, Node> explored;
+
+    @Override
+    protected void init(Board board, String order) {
+        super.init(board, order);
+        this.explored = new HashMap<>();
+    }
 
     @Override
     public Solution solve(Board board, String order) {
@@ -47,8 +58,12 @@ public class DFSSolver extends Solver {
     }
 
     private void hashNode(Node node) {
-        if (node != null && explored.add(node)) {
+        if (node == null) return;
+
+        Node prevNode = explored.get(node);
+        if (prevNode == null || prevNode.getDepth() > node.getDepth()) {
             solution.visitedNum++;
+            explored.put(node, node);
             frontier.push(node);
         }
     }
