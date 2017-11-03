@@ -9,7 +9,7 @@ public class DFSSolver extends Solver {
         long timeStart = System.nanoTime();
         init(board, order);
 
-        checkAndHash(currNode);
+        hashNode(currNode);
 
         while (!frontier.isEmpty() && !solution.solved) {
             currNode = frontier.pop();
@@ -33,21 +33,20 @@ public class DFSSolver extends Solver {
             for (int i = 0; i < order.length && !solution.solved; i++) {
                 char c = order[i];
                 if (c == 'L') {
-                    checkAndHash(node.getLeftChild());
+                    hashNode(node.getLeftChild());
                 } else if (c == 'R') {
-                    checkAndHash(node.getRightChild());
+                    hashNode(node.getRightChild());
                 } else if (c == 'U') {
-                    checkAndHash(node.getUpChild());
+                    hashNode(node.getUpChild());
                 } else if (c == 'D') {
-                    checkAndHash(node.getDownChild());
+                    hashNode(node.getDownChild());
                 }
             }
+            solution.finishedNum++;
         }
-
-        solution.finishedNum++;
     }
 
-    private void checkAndHash(Node node) {
+    private void hashNode(Node node) {
         if (node != null && explored.add(node)) {
             solution.visitedNum++;
             frontier.push(node);
