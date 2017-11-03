@@ -20,7 +20,7 @@ public class DFSSolver extends Solver {
         long timeStart = System.nanoTime();
         init(board, order);
 
-        hashNode(currNode);
+        hashMinCostNode(currNode);
 
         while (!frontier.isEmpty() && !solution.solved) {
             currNode = frontier.pop();
@@ -44,20 +44,20 @@ public class DFSSolver extends Solver {
             for (int i = 0; i < order.length && !solution.solved; i++) {
                 char c = order[i];
                 if (c == 'L') {
-                    hashNode(node.getLeftChild());
+                    hashMinCostNode(node.getLeftChild());
                 } else if (c == 'R') {
-                    hashNode(node.getRightChild());
+                    hashMinCostNode(node.getRightChild());
                 } else if (c == 'U') {
-                    hashNode(node.getUpChild());
+                    hashMinCostNode(node.getUpChild());
                 } else if (c == 'D') {
-                    hashNode(node.getDownChild());
+                    hashMinCostNode(node.getDownChild());
                 }
             }
             solution.finishedNum++;
         }
     }
 
-    private void hashNode(Node node) {
+    private void hashMinCostNode(Node node) {
         if (node == null) return;
 
         Node prevNode = explored.get(node);
