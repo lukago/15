@@ -40,7 +40,7 @@ public class DFSSolver extends Solver {
             return;
         }
 
-        if (node.getDepth() <= MAX_DEPTH) {
+        if (node.getDepth() < MAX_DEPTH) {
             for (int i = 0; i < order.length && !solution.solved; i++) {
                 char c = order[i];
                 if (c == 'L') {
