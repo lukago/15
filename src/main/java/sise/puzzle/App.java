@@ -27,10 +27,10 @@ public class App {
 
         Solver solver = parseSolver(alg);
         Board board = Utils.readBoardFromFile(dataPath);
-        System.out.println(String.format("Solving %s %s %s...", alg, order, dataPath));
+        System.out.printf("Solving %s %s %s...\n", alg, order, dataPath);
         Solution solution = solver.solve(board, order);
         Utils.writeSolution(solution, resPath);
-        Utils.writeStats(solution, statPath);
+        //Utils.writeStats(solution, statPath);
     }
 
     private static Solver parseSolver(String arg) {

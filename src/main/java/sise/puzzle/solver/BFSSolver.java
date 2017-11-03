@@ -2,13 +2,12 @@ package sise.puzzle.solver;
 
 public class BFSSolver extends Solver {
 
+    @Override
     public Solution solve(Board board, String order) {
         long timeStart = System.nanoTime();
         init(board, order);
 
-        explored.add(currNode);
-        frontier.push(currNode);
-        solution.visitedNum++;
+        hashNode(currNode);
 
         while (!frontier.isEmpty() && !solution.solved) {
             currNode = frontier.remove();

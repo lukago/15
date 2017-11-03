@@ -21,9 +21,7 @@ public class AstarSolver extends Solver {
         long timeStart = System.nanoTime();
         init(board, order);
 
-        explored.add(currNode);
-        frontier.add(currNode);
-        solution.visitedNum++;
+        calcHeurAndHash(currNode);
 
         while (!frontier.isEmpty() && !solution.solved) {
             currNode = Collections.min(frontier, (a, b) -> a.board.heuristicScore - b.board.heuristicScore);
@@ -46,15 +44,19 @@ public class AstarSolver extends Solver {
 
         Node[] neighbours = node.getNeighbours();
         for (Node neighbour : neighbours) {
-            if (neighbour != null && explored.add(neighbour)) {
-                neighbour.board.heuristicScore = neighbour.getDepth();
-                neighbour.board.heuristicScore += useHamm ? hammingDist(neighbour) : manhattanDist(neighbour);
-                frontier.add(neighbour);
-                solution.visitedNum++;
-            }
+            calcHeurAndHash(neighbour);
         }
 
         solution.finishedNum++;
+    }
+
+    private void calcHeurAndHash(Node node) {
+        if (node != null && explored.add(node)) {
+            node.board.heuristicScore = node.getDepth();
+            node.board.heuristicScore += useHamm ? hammingDist(node) : manhattanDist(node);
+            frontier.add(node);
+            solution.visitedNum++;
+        }
     }
 
     private int hammingDist(Node node) {

@@ -15,6 +15,7 @@ public class Utils {
      * Reads board data from file.
      * 1st row: "{width} {height}"
      * 2nd - {height} row: space separated values of board row
+     *
      * @param path path to file with board
      * @return board object
      */
@@ -50,8 +51,9 @@ public class Utils {
      * Writes solver solution to file.
      * 1st line: solution length or -1 if not found
      * 2nd line: solution path if found
+     *
      * @param solution calculated solution
-     * @param path path where to save file
+     * @param path     path where to save file
      */
     public static void writeSolution(Solution solution, String path) {
         try (FileWriter ostream = new FileWriter(path)) {
@@ -68,8 +70,9 @@ public class Utils {
 
     /**
      * Writes stats of solution to file (time as millis).
+     *
      * @param solution calculated solution
-     * @param path path where to save file
+     * @param path     path where to save file
      */
     public static void writeStats(Solution solution, String path) {
         try (FileWriter ostream = new FileWriter(path)) {
@@ -92,6 +95,7 @@ public class Utils {
 
     /**
      * Generates goal array based on board size
+     *
      * @param len width * height of board
      * @return goal array - from one to len - 1, zero last
      */
@@ -106,7 +110,8 @@ public class Utils {
 
     /**
      * Finds index of argument in array.
-     * @param arr array to search
+     *
+     * @param arr   array to search
      * @param value argumetn
      * @return index or -1 if not found
      */

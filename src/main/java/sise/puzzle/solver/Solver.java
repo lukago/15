@@ -22,7 +22,7 @@ public abstract class Solver {
     /** hashed explored and frontier nodes */
     protected Set<Node> explored;
 
-    /** nodes that are visited but not explored i.e kids are visited yet */
+    /** nodes that are visited but not explored */
     protected LinkedList<Node> frontier;
 
     /** solution returned from Solver::solve */
@@ -45,7 +45,7 @@ public abstract class Solver {
      */
     protected void init(Board board, String order) {
         this.goal = Utils.genGoal(board.width * board.height);
-        this.order = order.toCharArray();
+        this.order = order.toUpperCase().toCharArray();
         this.currNode = new Node(null, board);
         this.explored = new HashSet<>();
         this.frontier = new LinkedList<>();

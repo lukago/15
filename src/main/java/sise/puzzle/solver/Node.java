@@ -24,7 +24,7 @@ public class Node {
     }
 
     public Node getRightChild() {
-        if ((board.zeroIndex - board.width + 1) % board.width != 0) {
+        if ((board.zeroIndex + 1) % board.width != 0) {
             swapZero(board.zeroIndex + 1);
             Board childBoard = new Board(board.data, 'R', board.zeroIndex, board.width, board.height);
             Node child = new Node(this, childBoard);
@@ -35,7 +35,7 @@ public class Node {
     }
 
     public Node getUpChild() {
-        if ((board.zeroIndex - board.width + 1) > 0) {
+        if (board.zeroIndex - board.width >= 0) {
             swapZero(board.zeroIndex - board.width);
             Board childBoard = new Board(board.data, 'U', board.zeroIndex, board.width, board.height);
             Node child = new Node(this, childBoard);
@@ -46,7 +46,7 @@ public class Node {
     }
 
     public Node getDownChild() {
-        if (board.zeroIndex - (board.width * board.height - board.width) < 0) {
+        if (board.zeroIndex + board.width < board.width * board.height) {
             swapZero(board.zeroIndex + board.width);
             Board childBoard = new Board(board.data, 'D', board.zeroIndex, board.width, board.height);
             Node child = new Node(this, childBoard);

@@ -14,7 +14,7 @@ public class PuzzleTest {
     final byte[] goal3 = Utils.genGoal(9);
     final byte[] goal4 = Utils.genGoal(16);
 
-    final Board board1 = boardOf(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15}, 4, 4);
+    final Board board1 = boardOf(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 11, 13, 14, 15, 12}, 4, 4);
     final Board board2 = boardOf(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 13, 14, 15, 12}, 4, 4);
     final Board board3 = boardOf(new byte[]{1, 2, 3, 4, 5, 6, 11, 7, 14, 13, 10, 8, 9, 15, 0, 12}, 4, 4);
     final Board board5 = boardOf(new byte[]{1, 2, 3, 4, 5, 6, 7, 0, 8}, 3, 3);
@@ -24,7 +24,7 @@ public class PuzzleTest {
     public void bfsTest() {
         System.out.println("bfs");
         BFSSolver bfsSolver = new BFSSolver();
-        Assert.assertArrayEquals(follow(bfsSolver.solve(board1, o1).path, board1), goal4);
+        Assert.assertArrayEquals(follow(bfsSolver.solve(board1, o2).path, board1), goal4);
         Assert.assertArrayEquals(follow(bfsSolver.solve(board2, o2).path, board2), goal4);
         Assert.assertArrayEquals(follow(bfsSolver.solve(board3, o1).path, board3), goal4);
         Assert.assertArrayEquals(follow(bfsSolver.solve(board4, o2).path, board4), goal4);
@@ -35,7 +35,7 @@ public class PuzzleTest {
     public void dfsTest() {
         System.out.println("dfs");
         DFSSolver dfsSolver = new DFSSolver();
-        Assert.assertArrayEquals(follow(dfsSolver.solve(board1, o1).path, board1), goal4);
+        Assert.assertArrayEquals(follow(dfsSolver.solve(board1, o2).path, board1), goal4);
         Assert.assertArrayEquals(follow(dfsSolver.solve(board2, o2).path, board2), goal4);
         Assert.assertArrayEquals(follow(dfsSolver.solve(board3, o1).path, board3), goal4);
         Assert.assertArrayEquals(follow(dfsSolver.solve(board4, o2).path, board4), goal4);
