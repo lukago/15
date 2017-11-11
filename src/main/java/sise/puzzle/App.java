@@ -30,7 +30,7 @@ public class App {
         System.out.printf("Solving %s %s %s...\n", alg, order, dataPath);
         Solution solution = solver.solve(board, order);
         Utils.writeSolution(solution, resPath);
-        //Utils.writeStats(solution, statPath);
+        Utils.writeStats(solution, statPath);
     }
 
     private static Solver parseSolver(String arg) {

@@ -60,6 +60,13 @@ public class DFSSolver extends Solver {
     private void hashMinCostNode(Node node) {
         if (node == null) return;
 
+        if (isSolved(node)) {
+            solution.visitedNum++;
+            solution.solved = true;
+            solution.path = node.getPath();
+            return;
+        }
+
         Node prevNode = explored.get(node);
         if (prevNode == null || prevNode.getDepth() > node.getDepth()) {
             solution.visitedNum++;
