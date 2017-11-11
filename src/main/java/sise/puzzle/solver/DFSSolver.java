@@ -61,8 +61,8 @@ public class DFSSolver extends Solver {
         if (node == null) return;
 
         if (isSolved(node)) {
+            solution.maxDepth = Math.max(solution.maxDepth, node.getDepth());
             solution.visitedNum++;
-            solution.maxDepth++;
             solution.solved = true;
             solution.path = node.getPath();
             return;
