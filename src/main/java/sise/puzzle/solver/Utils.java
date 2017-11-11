@@ -85,7 +85,7 @@ public class Utils {
             ostream.write(solution.finishedNum + "\n");
             ostream.write(solution.maxDepth + "\n");
 
-            double timeMillis = solution.timeNanos / 1000.0;
+            double timeMillis = solution.timeNanos / 10E6;
             DecimalFormat threeDigits = new DecimalFormat("#0.000");
             ostream.write(threeDigits.format(timeMillis) + "\n");
         } catch (IOException e) {
