@@ -32,7 +32,8 @@ public class DFSSolver extends Solver {
     }
 
     private void explorePaths(Node node) {
-        solution.maxDepth = Math.max(solution.maxDepth, node.getDepth());
+        int depth = node.getDepth();
+        solution.maxDepth = Math.max(solution.maxDepth, depth);
 
         if (isSolved(node)) {
             solution.solved = true;
@@ -40,7 +41,7 @@ public class DFSSolver extends Solver {
             return;
         }
 
-        if (node.getDepth() < MAX_DEPTH) {
+        if (depth < MAX_DEPTH) {
             for (int i = 0; i < order.length && !solution.solved; i++) {
                 char c = order[i];
                 if (c == 'L') {
@@ -53,7 +54,7 @@ public class DFSSolver extends Solver {
                     hashMinCostNode(node.getDownChild());
                 }
             }
-            solution.maxDepth = Math.max(solution.maxDepth, node.getDepth() + 1);
+            solution.maxDepth = Math.max(solution.maxDepth, depth + 1);
             solution.finishedNum++;
         }
     }
