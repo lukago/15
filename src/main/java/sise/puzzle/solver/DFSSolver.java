@@ -53,7 +53,7 @@ public class DFSSolver extends Solver {
                     hashMinCostNode(node.getDownChild());
                 }
             }
-            solution.maxDepth = Math.max(solution.maxDepth, node.getDepth());
+            solution.maxDepth = Math.max(solution.maxDepth, node.getDepth() + 1);
             solution.finishedNum++;
         }
     }
