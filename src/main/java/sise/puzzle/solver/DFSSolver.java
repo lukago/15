@@ -42,7 +42,7 @@ public class DFSSolver extends Solver {
         }
 
         if (depth < MAX_DEPTH) {
-            for (int i = 0; i < order.length && !solution.solved; i++) {
+            for (int i = order.length - 1; i >= 0 && !solution.solved; i--) {
                 char c = order[i];
                 if (c == 'L') {
                     hashMinCostNode(node.getLeftChild());
